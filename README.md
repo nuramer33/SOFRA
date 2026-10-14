@@ -1,58 +1,120 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Sofra
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+**English** · [العربية](README.ar.md) · [Türkçe](README.tr.md)
 
-## About Laravel
+Sofra is a digital menu and WhatsApp ordering platform for small shops: cafés, restaurants, perfume and accessory stores, Instagram businesses.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+A shop owner signs up, adds categories and products with photos and prices, and gets a public link and a QR code. Customers open the menu on their phone, build an order, and send it through WhatsApp. **Sofra never stores customer orders**: the order lives in the chat between the customer and the shop.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+- Three languages: Arabic (right-to-left, default), Turkish and English. The menu follows the customer's phone language.
+- Multi-tenant: every shop's data is isolated at the database query level.
+- Subscription: 60 days free, then a monthly plan (paid manually or automatically with Stripe).
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## Features
 
-## Learning Laravel
+**For customers**
+- Browse the menu, search, open product details, add to a cart that is saved in their own browser.
+- Choose dine-in (with an optional table number), pickup or delivery.
+- Send the order through a ready-made WhatsApp message. Prices are always taken from the database, never from the browser.
+- "Goes well with" suggestions and offers. Nothing is added to the cart automatically.
+- Private ratings for the owner.
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+**For shop owners**
+- Categories, products, photos (compressed to WebP), prices, sale prices.
+- **Today** page for quick changes from a phone: pause new orders, sold out today, edit price, name, description or photo, switch offers on or off.
+- Ordering hours with a time zone, including shifts that cross midnight.
+- Suggestions and discounts that the owner configures; discounts are calculated on the server.
+- Privacy-friendly analytics: menu views, product views, add-to-cart, WhatsApp button clicks. Counters only, no personal data. A WhatsApp click is never presented as a confirmed order.
+- One QR code per shop (brand color, print-ready PNG/SVG and an A6 table card). `?table=5` pre-fills the table number; no separate QR per table.
+- Two menu looks: **Classic** (cafés, restaurants) and **Luxe** (perfume, accessories, gifts).
+- Delivery fee and minimum order, address, opening hours, maps and Instagram links.
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+**For the platform administrator**
+- Shop list with search and filters, CSV export.
+- Record payments, give free days, suspend and re-activate, with a history of actions.
+- Subscription states: trial, ending soon, active, past due, expired, manually suspended. What the public menu does after expiry is configurable.
 
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
+## Tech stack
 
-## Agentic Development
+Laravel 13 · PHP 8.3 · MySQL · Blade · Tailwind CSS v4 · Alpine.js · Vite
 
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+## Quick start
+
+Requirements: PHP 8.3 (with the GD or Imagick extension), Composer, Node.js, MySQL.
 
 ```bash
-composer require laravel/boost --dev
-
-php artisan boost:install
+git clone <this repository> sofra
+cd sofra
+composer install
+cp .env.example .env
+php artisan key:generate
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+Create a MySQL database and set `DB_*` in `.env`, then:
+
+```bash
+php artisan migrate --seed
+php artisan storage:link
+npm install
+npm run build
+php artisan serve
+```
+
+Open http://localhost:8000.
+
+Local demo accounts (created by the seeder, for development only):
+
+| Role | Email | Password |
+| --- | --- | --- |
+| Shop owner | `demo@sofra.test` | `password` |
+| Administrator | `admin@sofra.test` | `password` |
+
+The public demo menu is at `/demo`. On a real server create the administrator with `php artisan sofra:admin you@example.com` and never use the demo accounts.
+
+## Configuration
+
+Product settings live in `config/sofra.php`; secrets and per-environment values go in `.env` (see `.env.example`).
+
+| Variable | Purpose |
+| --- | --- |
+| `SOFRA_MONTHLY_PRICE` | Price text shown to owners, for example `$12` |
+| `SOFRA_SUPPORT_WHATSAPP`, `SOFRA_SUPPORT_EMAIL` | Where owners contact you to renew |
+| `SOFRA_EXPIRED_MENU` | Public menu after expiry: `visible`, `read_only` (default) or `suspended` |
+| `STRIPE_SECRET`, `STRIPE_PRICE_ID`, `STRIPE_WEBHOOK_SECRET` | Automatic monthly payment with Stripe. Leave empty to keep payments manual |
+| `MAIL_*` | SMTP for reviews and subscription reminders. Test with `php artisan sofra:mail-test you@example.com` |
+
+### Automatic payment with Stripe (optional)
+
+1. In Stripe, create a recurring monthly Price and copy its id (`price_...`).
+2. Enable the Customer portal (card update and cancellation).
+3. Add a webhook endpoint `https://your-domain/stripe/webhook` for: `checkout.session.completed`, `invoice.paid`, `invoice.payment_failed`, `customer.subscription.updated`, `customer.subscription.deleted`.
+4. Put the keys in `.env`.
+
+Owners enter their card on Stripe's own page; Sofra never sees or stores it. Paid time is granted only by the signature-verified webhook.
+
+## Scheduled tasks
+
+Add one cron line on the server:
+
+```
+* * * * * cd /path/to/sofra && php artisan schedule:run >> /dev/null 2>&1
+```
+
+It runs the daily backup (`sofra:backup`), subscription reminders (`sofra:subscription-reminders`) and analytics cleanup (`sofra:prune-analytics`).
+
+## Tests
+
+```bash
+php artisan test --compact
+vendor/bin/pint --format agent
+```
+
+## Privacy and security notes
+
+- No customer orders, names, phone numbers or addresses are stored by the server. Analytics store daily counters only, with a retention period each shop chooses.
+- Tenant isolation, server-side price and discount calculation, rate limits on public endpoints, validated uploads and a signed Stripe webhook.
+- The privacy policy and terms pages are drafts and should be reviewed by a lawyer before launch.
 
 ## Contributing
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
-
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Issues and pull requests are welcome. Please run the tests and Pint before opening a pull request.
