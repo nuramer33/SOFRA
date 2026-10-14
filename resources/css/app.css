@@ -1,0 +1,219 @@
+@import 'tailwindcss';
+
+/* Self-hosted variable fonts. unicode-range subsets mean an Arabic page
+   only downloads the Arabic slices, a Turkish page only the Latin ones. */
+@import '@fontsource-variable/readex-pro';
+@import '@fontsource-variable/fraunces';
+/* Mirza (ornate Naskh) for Arabic headings: only the Arabic slice, two weights. */
+@import '@fontsource/mirza/arabic-600.css';
+@import '@fontsource/mirza/arabic-700.css';
+
+@import './menu.css';
+@import './landing.css';
+
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+@source '../../storage/framework/views/*.php';
+
+/* ------------------------------------------------------------------
+   Design tokens — "Sofra" palette
+   Warm café materials: paper menus, espresso, terracotta clay,
+   olive, saffron. Food photography glows on cream; it dies on
+   cold white or neon.
+   ------------------------------------------------------------------ */
+@theme {
+    --font-sans: 'Readex Pro Variable', ui-sans-serif, system-ui, sans-serif;
+    --font-display: 'Fraunces Variable', 'Mirza', ui-serif, Georgia, serif;
+
+    --color-paper: #f4f2e7;
+    --color-sand: #e9e8d3;
+    --color-sand-deep: #dcdcbf;
+    --color-line: #d2d1b4;
+
+    --color-ink: #1f2417;
+    --color-ink-soft: #4d5340;
+    --color-ink-mute: #656b56;
+
+    --color-clay: #55642f;
+    --color-clay-deep: #38431e;
+    --color-clay-soft: #e3e8cb;
+
+    --color-olive: #7d8c4b;
+    --color-olive-soft: #e6ead2;
+
+    --color-saffron: #d8a93f;
+    --color-danger: #b3261e;
+
+    --ease-soft: cubic-bezier(0.22, 1, 0.36, 1);
+    --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+    --animate-rise: rise 0.9s var(--ease-soft) both;
+    --animate-float: float 7s ease-in-out infinite;
+
+    @keyframes rise {
+        from { opacity: 0; transform: translateY(18px); }
+        to   { opacity: 1; transform: none; }
+    }
+
+    @keyframes pop {
+        from { opacity: 0; transform: scale(0.94); }
+        to   { opacity: 1; transform: none; }
+    }
+
+    @keyframes float {
+        0%, 100% { transform: translateY(0) rotate(var(--tilt, 0deg)); }
+        50%      { transform: translateY(-10px) rotate(var(--tilt, 0deg)); }
+    }
+}
+
+/* Arabic headings: Mirza — decorative Naskh with gentle flourishes, still
+   very legible. Only its Arabic letters are loaded, so Latin words and
+   digits inside Arabic titles fall through to Fraunces (same brand voice). */
+:lang(ar) {
+    --font-display: 'Mirza', 'Fraunces Variable', ui-serif, serif;
+}
+
+@layer base {
+    html {
+        -webkit-tap-highlight-color: transparent;
+        text-rendering: optimizeLegibility;
+    }
+
+    body {
+        @apply bg-paper text-ink font-sans antialiased;
+        line-height: 1.6;
+    }
+
+    /* Arabic needs more vertical room for dots and descenders. */
+    :lang(ar) body,
+    body:lang(ar) {
+        line-height: 1.8;
+    }
+
+    [x-cloak] {
+        display: none !important;
+    }
+
+    ::selection {
+        @apply bg-clay text-paper;
+    }
+
+    :focus-visible {
+        outline: 2px solid var(--color-clay);
+        outline-offset: 3px;
+        border-radius: 6px;
+    }
+}
+
+@layer components {
+    /* Small label above titles. Letter-spacing breaks Arabic joining,
+       so tracking only applies to Latin-script languages. */
+    .eyebrow {
+        @apply text-xs font-medium text-clay;
+    }
+    .eyebrow:not(:lang(ar)) {
+        @apply uppercase tracking-[0.18em];
+    }
+
+    /* Signature shape: an arch, borrowed from Levantine & Ottoman doorways. */
+    .arch {
+        border-radius: 999px 999px 1.75rem 1.75rem;
+    }
+
+    .card {
+        @apply rounded-3xl border border-line bg-white/60 shadow-[0_1px_0_rgb(255_255_255/0.6)_inset,0_10px_30px_-18px_rgb(36_26_20/0.25)];
+    }
+
+    /* Inputs ------------------------------------------------------- */
+    .field {
+        @apply block w-full rounded-2xl border border-line bg-white/80 px-4 py-3.5 text-base text-ink
+               placeholder:text-ink-mute/70 transition-[border-color,box-shadow,background-color] duration-200
+               focus:border-clay focus:bg-white focus:outline-none focus:ring-4 focus:ring-clay/15;
+    }
+    .field[aria-invalid='true'] {
+        @apply border-danger focus:ring-danger/15;
+    }
+
+    /* Buttons ------------------------------------------------------ */
+    .btn {
+        @apply relative inline-flex select-none items-center justify-center gap-2 rounded-full px-6 py-3.5
+               text-base font-medium transition-[transform,background-color,box-shadow,color] duration-200
+               ease-(--ease-soft) active:scale-[0.97] disabled:pointer-events-none disabled:opacity-60;
+    }
+    /* Use together: class="btn btn-primary" */
+    .btn-primary {
+        @apply bg-clay text-paper shadow-[0_8px_20px_-10px_var(--color-clay)] hover:bg-clay-deep;
+    }
+    .btn-ghost {
+        @apply border border-line bg-white/50 text-ink hover:bg-white;
+    }
+
+    /* Arrow icons point "forward" — which is left in RTL. */
+    [dir='rtl'] .flip-rtl {
+        transform: scaleX(-1);
+    }
+}
+
+@layer utilities {
+    /* Staggered entrance: <div class="reveal" style="--i: 2">  */
+    .reveal {
+        animation: var(--animate-rise);
+        animation-delay: calc(var(--i, 0) * 80ms + 60ms);
+    }
+
+    /* Very light paper grain, a single inline SVG — no image request. */
+    .grain {
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.14 0 0 0 0 0.1 0 0 0 0 0.08 0 0 0 0.05 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    }
+
+    .pb-safe {
+        padding-bottom: max(1rem, env(safe-area-inset-bottom));
+    }
+}
+
+/* ------------------------------------------------------------------
+   Page transitions between dashboard pages, with zero JavaScript:
+   the browser cross-fades documents (View Transitions API).
+   Browsers without support simply navigate normally.
+   ------------------------------------------------------------------ */
+@view-transition {
+    navigation: auto;
+}
+
+::view-transition-old(root) {
+    animation: 180ms ease-out both vt-out;
+}
+::view-transition-new(root) {
+    animation: 380ms var(--ease-soft) both vt-in;
+}
+/* Navigation chrome stays still while the content changes. */
+.vt-sidebar { view-transition-name: sidebar; }
+.vt-tabbar { view-transition-name: tabbar; }
+
+@keyframes vt-out {
+    to { opacity: 0; }
+}
+@keyframes vt-in {
+    from { opacity: 0; transform: translateY(10px); }
+}
+
+/* Anchored rows (#product-12) land below the sticky mobile header. */
+[id^='product-'],
+[id^='category-'] {
+    scroll-margin-top: 6rem;
+}
+
+/* Respect people who asked their OS for less motion. */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+
+    @view-transition {
+        navigation: none;
+    }
+}

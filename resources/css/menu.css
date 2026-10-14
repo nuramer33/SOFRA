@@ -1,0 +1,356 @@
+/* ==================================================================
+   Public menu — "Classic" template
+   Every animation here moves only transform / opacity (GPU-friendly)
+   and switches off under prefers-reduced-motion (see app.css).
+   ================================================================== */
+
+/* Each shop's brand color arrives as CSS variables on <body>:
+   --brand (raw), --brand-fg (text on brand), --brand-ink (brand as
+   readable text on cream). Usable as bg-brand, text-brand-ink, etc. */
+@theme inline {
+    --color-brand: var(--brand, #55642f);
+    --color-brand-fg: var(--brand-fg, #ffffff);
+    --color-brand-ink: var(--brand-ink, #55642f);
+}
+
+@layer components {
+    .bg-brand-wash {
+        background-color: color-mix(in oklab, var(--brand, #55642f) 9%, var(--color-paper));
+    }
+
+    /* Thin rule with a small eight-point star in the middle. */
+    .ornament {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        color: var(--brand-ink, #55642f);
+    }
+    .ornament::before,
+    .ornament::after {
+        content: '';
+        height: 1px;
+        flex: 1;
+        background: linear-gradient(to var(--ornament-dir, right), transparent, var(--color-line));
+    }
+    .ornament::after {
+        --ornament-dir: left;
+    }
+    /* Gradients use physical directions — mirror them in RTL. */
+    [dir='rtl'] .ornament::before {
+        --ornament-dir: left;
+    }
+    [dir='rtl'] .ornament::after {
+        --ornament-dir: right;
+    }
+}
+
+/* ---------------------------------------------------------------
+   Scroll reveal. Hidden state only applies when JS is running
+   (html.js), so the menu is never blank without JavaScript.
+   --------------------------------------------------------------- */
+.js [data-reveal] {
+    opacity: 0;
+    transform: translateY(18px);
+    transition:
+        opacity 0.7s var(--ease-soft),
+        transform 0.7s var(--ease-soft);
+    transition-delay: var(--reveal-delay, 0ms);
+}
+.js [data-reveal].is-in {
+    opacity: 1;
+    transform: none;
+}
+
+/* Hero content rises in on load (after the intro, if it plays). */
+.hero-in {
+    animation: rise 0.9s var(--ease-soft) both;
+    animation-delay: calc(var(--i, 0) * 90ms + var(--hero-delay, 60ms));
+}
+.intro .hero-in {
+    --hero-delay: 1450ms;
+}
+
+/* Images fade in once decoded instead of popping in. */
+.js .img-fade {
+    opacity: 0;
+    transition: opacity 0.6s ease;
+}
+.js .img-fade.is-loaded {
+    opacity: 1;
+}
+
+/* Long menus: let the browser skip rendering off-screen sections. */
+.menu-section {
+    content-visibility: auto;
+    contain-intrinsic-size: auto 640px;
+}
+
+/* ---------------------------------------------------------------
+   First-visit moment (once per shop per browser session)
+   1. brand color fills the screen, an arch rises with the logo
+   2. the shop name slides up into view
+   3. the whole curtain lifts away and the menu rises in
+   Pure CSS, ~1.5s, tap to skip. Set up by an inline <head> script.
+   --------------------------------------------------------------- */
+.splash {
+    display: none;
+}
+.intro .splash {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    display: grid;
+    place-items: center;
+    background: var(--brand, #55642f);
+    color: var(--brand-fg, #fff);
+    animation: curtain-up 0.75s cubic-bezier(0.76, 0, 0.24, 1) 1.2s both;
+}
+.intro .splash-arch {
+    transform-origin: bottom;
+    animation: arch-grow 0.8s var(--ease-soft) 0.05s both;
+}
+.intro .splash-logo {
+    animation: pop 0.6s var(--ease-spring) 0.45s both;
+}
+.intro .splash-name {
+    animation: name-up 0.7s var(--ease-soft) 0.6s both;
+}
+.intro.is-skipped .splash {
+    animation: curtain-up 0.45s cubic-bezier(0.76, 0, 0.24, 1) both;
+}
+
+@keyframes curtain-up {
+    to {
+        transform: translateY(-100%);
+        visibility: hidden;
+    }
+}
+@keyframes arch-grow {
+    from {
+        transform: scaleY(0);
+    }
+}
+@keyframes name-up {
+    from {
+        transform: translateY(110%);
+    }
+}
+
+/* ---------------------------------------------------------------
+   Product sheet + View Transitions
+   The photo morphs from the card into the sheet ("product-hero"),
+   the panel slides up, the backdrop fades.
+   --------------------------------------------------------------- */
+html.sheet-open {
+    overflow: hidden;
+}
+
+.sheet-panel {
+    view-transition-name: sheet-panel;
+}
+.sheet-backdrop {
+    view-transition-name: sheet-backdrop;
+}
+
+/* Browsers without View Transitions get plain CSS animations. */
+.no-vt .sheet-panel {
+    animation: sheet-up 0.5s var(--ease-soft) both;
+}
+.no-vt .sheet-backdrop {
+    animation: fade-in 0.35s ease both;
+}
+.no-vt .is-closing .sheet-panel {
+    animation: sheet-down 0.28s ease-in both;
+}
+.no-vt .is-closing .sheet-backdrop {
+    animation: fade-out 0.28s ease both;
+}
+
+/* While a sheet transition runs, the page itself must not cross-fade. */
+:root.is-menu::view-transition-old(root),
+:root.is-menu::view-transition-new(root) {
+    animation: none;
+}
+::view-transition-group(product-hero) {
+    animation-duration: 0.55s;
+    animation-timing-function: var(--ease-soft);
+}
+/* The arch-shaped card photo and the rounded sheet photo have different
+   proportions: cover the box instead of stretching while they morph. */
+::view-transition-old(product-hero),
+::view-transition-new(product-hero) {
+    height: 100%;
+    object-fit: cover;
+}
+::view-transition-new(sheet-panel):only-child {
+    animation: sheet-up 0.55s var(--ease-soft) both;
+}
+::view-transition-old(sheet-panel):only-child {
+    animation: sheet-down 0.3s ease-in both;
+}
+::view-transition-new(sheet-backdrop):only-child {
+    animation: fade-in 0.4s ease both;
+}
+::view-transition-old(sheet-backdrop):only-child {
+    animation: fade-out 0.3s ease both;
+}
+
+@keyframes sheet-up {
+    from {
+        transform: translateY(100%);
+    }
+}
+@keyframes sheet-down {
+    to {
+        transform: translateY(100%);
+    }
+}
+@keyframes fade-in {
+    from {
+        opacity: 0;
+    }
+}
+@keyframes fade-out {
+    to {
+        opacity: 0;
+    }
+}
+
+/* Category bar: the dark pill slides between chips. */
+.chip-indicator {
+    transition:
+        transform 0.45s var(--ease-soft),
+        width 0.45s var(--ease-soft);
+}
+
+/* Compact header (shop name) appears once the hero scrolls away. */
+.menu-bar-brand {
+    transition:
+        opacity 0.3s ease,
+        transform 0.4s var(--ease-soft);
+}
+
+/* ==================================================================
+   Public menu — "Luxe" template (perfume, accessories, boutiques)
+   The whole template is a re-skin through the same color variables the
+   classic template uses, so the product sheet, cart and review dialogs
+   follow automatically. The field color is the shop's own brand color,
+   taken down to a deep tone; the accent is a light champagne drawn from
+   the same brand, so every shop gets its own look.
+   Set on <body>: --lx = the shop's raw brand color.
+   ================================================================== */
+.theme-luxe {
+    color-scheme: dark;
+
+    --lx-field: color-mix(in oklab, var(--lx, #55642f) 30%, #090807);
+    --lx-raise: color-mix(in oklab, var(--lx-field) 86%, white);
+    --lx-text: color-mix(in oklab, var(--lx, #55642f) 7%, #f7f2ea);
+    --lx-accent: color-mix(in oklab, var(--lx, #55642f) 36%, #f1e4c6);
+
+    --color-paper: var(--lx-field);
+    --color-sand: var(--lx-raise);
+    --color-sand-deep: color-mix(in oklab, var(--lx-field) 78%, white);
+    --color-line: color-mix(in oklab, var(--lx-text) 17%, var(--lx-field));
+
+    --color-ink: var(--lx-text);
+    --color-ink-soft: color-mix(in oklab, var(--lx-text) 76%, var(--lx-field));
+    --color-ink-mute: color-mix(in oklab, var(--lx-text) 60%, var(--lx-field));
+
+    --color-clay: var(--lx-accent);
+    --color-clay-deep: var(--lx-text);
+    --color-danger: #f29a90;
+
+    --brand: var(--lx-accent);
+    --brand-fg: var(--lx-field);
+    --brand-ink: var(--lx-accent);
+
+    background-color: var(--lx-field);
+}
+
+.theme-luxe ::selection {
+    background: var(--lx-accent);
+    color: var(--lx-field);
+}
+
+/* Inputs and ghost buttons were built for light paper. */
+.theme-luxe .field {
+    background-color: color-mix(in oklab, var(--lx-field) 82%, white);
+    border-color: var(--color-line);
+    color: var(--lx-text);
+}
+.theme-luxe .field:focus {
+    background-color: color-mix(in oklab, var(--lx-field) 76%, white);
+    border-color: var(--lx-accent);
+}
+.theme-luxe .btn-ghost {
+    background-color: transparent;
+    border-color: var(--color-line);
+    color: var(--lx-text);
+}
+.theme-luxe .btn-ghost:hover {
+    background-color: var(--lx-raise);
+}
+
+/* "ink" is the light text color here, so the dimmed backdrop behind sheets is set explicitly. */
+.theme-luxe .bg-ink\/50 {
+    background-color: rgb(0 0 0 / 0.62);
+}
+
+/* The language button was made for a light page. */
+.theme-luxe button[aria-haspopup='menu'] {
+    background-color: transparent;
+    color: var(--lx-text);
+    --tw-ring-color: var(--color-line);
+}
+.theme-luxe button[aria-haspopup='menu']:hover {
+    background-color: var(--lx-raise);
+}
+
+.theme-luxe .splash {
+    background: var(--lx-field);
+    color: var(--lx-text);
+}
+
+@layer components {
+    /* A display niche: the arch of the Sofra mark, opened at the bottom edge. */
+    .lx-niche {
+        border-radius: 999px 999px 0 0;
+    }
+
+    /* The shop name is the one big gesture of the page. */
+    .lx-name {
+        font-family: var(--font-display);
+        font-weight: 300;
+        font-size: clamp(2.5rem, 11vw, 4.4rem);
+        line-height: 1.04;
+        text-wrap: balance;
+    }
+    .lx-name:not(:lang(ar)) {
+        letter-spacing: -0.015em;
+    }
+    :lang(ar) .lx-name {
+        font-weight: 600;
+        line-height: 1.3;
+    }
+
+    /* Small captions: spaced capitals look fine in Latin and break Arabic joins. */
+    .lx-caption:not(:lang(ar)) {
+        letter-spacing: 0.06em;
+    }
+
+    /* Hairline that fades out, used under the hero and between sections. */
+    .lx-rule {
+        height: 1px;
+        background: linear-gradient(to right, transparent, var(--color-line), transparent);
+    }
+}
+
+/* Gentle zoom on the product photo; transform only. */
+.theme-luxe [data-photo] img {
+    transition: transform 0.9s var(--ease-soft), opacity 0.6s ease;
+}
+@media (hover: hover) {
+    .theme-luxe [data-card]:hover [data-photo] img {
+        transform: scale(1.04);
+    }
+}

@@ -1,0 +1,333 @@
+/* ==================================================================
+   Landing page (marketing site)
+   All motion = transform/opacity, paused off-screen, and disabled
+   under prefers-reduced-motion (see app.css).
+   ================================================================== */
+
+/* Hero headline: each word rises out of its own mask. */
+.word-mask {
+    display: inline-block;
+    overflow: hidden;
+    vertical-align: bottom;
+    padding-bottom: 0.08em;
+    margin-bottom: -0.08em;
+}
+.word-mask > span {
+    display: inline-block;
+    animation: word-up 0.9s var(--ease-soft) both;
+    animation-delay: calc(var(--w, 0) * 70ms + 120ms);
+}
+@keyframes word-up {
+    from {
+        transform: translateY(105%);
+    }
+}
+
+/* Business types marquee (direction follows the language). */
+.marquee-track {
+    animation: marquee 38s linear infinite;
+}
+[dir='rtl'] .marquee-track {
+    animation-name: marquee-rtl;
+}
+.marquee:hover .marquee-track {
+    animation-play-state: paused;
+}
+@keyframes marquee {
+    to {
+        transform: translateX(-50%);
+    }
+}
+@keyframes marquee-rtl {
+    to {
+        transform: translateX(50%);
+    }
+}
+
+/* "How it works": the connecting line draws itself in. */
+.js .draw-line {
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 1.4s var(--ease-soft) 0.2s;
+}
+/* <html> carries both dir and the .js class. */
+.js[dir='rtl'] .draw-line {
+    transform-origin: right;
+}
+.js .is-in .draw-line,
+.js .draw-line.is-in {
+    transform: none;
+}
+
+/* ------------------------------------------------------------------
+   Phone story — one 10s loop, every element timed on the same clock:
+   tap "+" → dot flies to cart → cart bar rises → tap → WhatsApp opens
+   → order message arrives → ticks turn blue → "new order" toast.
+   Runs only while visible (.is-playing, set by landing.js).
+   ------------------------------------------------------------------ */
+.story {
+    --cycle: 10s;
+    --flip: 1;
+}
+[dir='rtl'] .story {
+    --flip: -1;
+}
+.story [class*='st-'] {
+    animation-duration: var(--cycle);
+    animation-iteration-count: infinite;
+    animation-timing-function: var(--ease-soft);
+    animation-fill-mode: both;
+    animation-play-state: paused;
+}
+.story.is-playing [class*='st-'] {
+    animation-play-state: running;
+}
+
+.st-tap1 { animation-name: st-tap1; }
+.st-tap2 { animation-name: st-tap2; }
+.st-plus { animation-name: st-plus; }
+.st-count { animation-name: st-count; }
+.st-dot { animation-name: st-dot; }
+.st-bar { animation-name: st-bar; }
+.st-menu { animation-name: st-menu; }
+.st-chat { animation-name: st-chat; }
+.st-bubble { animation-name: st-bubble; }
+.st-ticks { animation-name: st-ticks; }
+.st-toast { animation-name: st-toast; }
+
+@keyframes st-tap1 {
+    0%, 11% { opacity: 0; transform: scale(0.6); }
+    13% { opacity: 0.85; transform: scale(0.6); }
+    19%, 100% { opacity: 0; transform: scale(1.9); }
+}
+@keyframes st-plus {
+    0%, 15% { opacity: 1; transform: scale(1); }
+    16%, 96% { opacity: 0; transform: scale(0.4); }
+    99%, 100% { opacity: 1; transform: scale(1); }
+}
+@keyframes st-count {
+    0%, 15% { opacity: 0; transform: scale(0.4); }
+    18% { opacity: 1; transform: scale(1.25); }
+    21%, 96% { opacity: 1; transform: scale(1); }
+    99%, 100% { opacity: 0; transform: scale(0.4); }
+}
+@keyframes st-dot {
+    0%, 16% { opacity: 0; transform: translate(0, 0) scale(1); }
+    17% { opacity: 1; transform: translate(0, 0) scale(1); }
+    22% { opacity: 1; transform: translate(calc(var(--dx) * 0.5 * var(--flip)), calc(var(--dy) * 0.2 - 40px)) scale(1.1); }
+    27% { opacity: 0; transform: translate(calc(var(--dx) * var(--flip)), var(--dy)) scale(0.4); }
+    100% { opacity: 0; transform: translate(calc(var(--dx) * var(--flip)), var(--dy)) scale(0.4); }
+}
+@keyframes st-bar {
+    0%, 24% { transform: translateY(140%); }
+    29% { transform: translateY(-6%); }
+    32%, 96% { transform: translateY(0); }
+    100% { transform: translateY(140%); }
+}
+@keyframes st-tap2 {
+    0%, 37% { opacity: 0; transform: scale(0.6); }
+    39% { opacity: 0.85; transform: scale(0.6); }
+    45%, 100% { opacity: 0; transform: scale(1.9); }
+}
+@keyframes st-menu {
+    0%, 44% { opacity: 1; transform: scale(1); }
+    51%, 95% { opacity: 0; transform: scale(0.95); }
+    100% { opacity: 1; transform: scale(1); }
+}
+@keyframes st-chat {
+    0%, 46% { opacity: 0; transform: translateY(16px); }
+    52%, 94% { opacity: 1; transform: none; }
+    99%, 100% { opacity: 0; transform: translateY(16px); }
+}
+@keyframes st-bubble {
+    0%, 53% { opacity: 0; transform: translateY(14px) scale(0.9); }
+    58%, 94% { opacity: 1; transform: none; }
+    98%, 100% { opacity: 0; transform: translateY(14px) scale(0.9); }
+}
+@keyframes st-ticks {
+    0%, 63% { color: var(--color-ink-mute); }
+    66%, 100% { color: #34b7f1; }
+}
+@keyframes st-toast {
+    0%, 64% { opacity: 0; transform: translateY(14px) scale(0.94); }
+    68%, 90% { opacity: 1; transform: none; }
+    95%, 100% { opacity: 0; transform: translateY(-6px) scale(0.97); }
+}
+
+/* Gentle drift for decorative arches. */
+@keyframes drift {
+    50% {
+        transform: translateY(-14px) rotate(1.5deg);
+    }
+}
+.drift {
+    animation: drift 12s ease-in-out infinite;
+}
+
+/* FAQ answers open with a height transition (grid-rows trick). */
+.faq-panel {
+    display: grid;
+    grid-template-rows: 1fr; /* without JS every answer stays readable */
+    transition: grid-template-rows 0.45s var(--ease-soft);
+}
+.js .faq-panel:not(.is-open) {
+    grid-template-rows: 0fr;
+}
+
+/* Reading progress: a thin olive line across the top (CSS only). */
+.scroll-progress {
+    position: fixed;
+    inset: 0 0 auto 0;
+    z-index: 60;
+    height: 3px;
+    background: linear-gradient(90deg, var(--color-olive), var(--color-saffron));
+    transform: scaleX(0);
+    transform-origin: left;
+}
+[dir='rtl'] .scroll-progress {
+    transform-origin: right;
+}
+@supports (animation-timeline: scroll()) {
+    .scroll-progress {
+        animation: progress linear both;
+        animation-timeline: scroll(root);
+    }
+}
+@keyframes progress {
+    to { transform: scaleX(1); }
+}
+
+/* Slowly breathing blobs behind the hero. */
+.blob {
+    animation: blob 18s ease-in-out infinite;
+}
+.blob-2 {
+    animation-duration: 24s;
+    animation-direction: reverse;
+}
+@keyframes blob {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    33% { transform: translate(24px, -18px) scale(1.08); }
+    66% { transform: translate(-18px, 22px) scale(0.95); }
+}
+
+/* Olive leaves that sway in the wind. */
+.leaf {
+    position: absolute;
+    transform-origin: 50% 100%;
+    animation: sway 7s ease-in-out infinite;
+    animation-delay: calc(var(--d, 0) * -1s);
+}
+@keyframes sway {
+    0%, 100% { transform: rotate(calc(var(--r, 0deg) - 5deg)); }
+    50% { transform: rotate(calc(var(--r, 0deg) + 6deg)); }
+}
+
+/* The phone follows the pointer a little (set by landing.js). */
+.tilt {
+    transform: perspective(1100px) rotateY(calc(var(--tx, 0) * 7deg)) rotateX(calc(var(--ty, 0) * -5deg));
+    transition: transform 0.35s var(--ease-soft);
+    will-change: transform;
+}
+
+/* Main button: a soft light sweeps across now and then. */
+.btn-shine {
+    overflow: hidden;
+    isolation: isolate;
+}
+.btn-shine::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: linear-gradient(105deg, transparent 35%, rgb(255 255 255 / 0.28) 50%, transparent 65%);
+    transform: translateX(-120%);
+    animation: shine 4.5s ease-in-out 1.6s infinite;
+}
+@keyframes shine {
+    0%, 55% { transform: translateX(-120%); }
+    100% { transform: translateX(120%); }
+}
+
+/* Cards in the dark section lift on hover. */
+.landing-olive #features article {
+    transition: transform 0.5s var(--ease-soft), box-shadow 0.5s var(--ease-soft);
+}
+@media (hover: hover) {
+    .landing-olive #features article:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 30px 50px -28px rgb(0 0 0 / 0.55);
+    }
+}
+
+/* Numbers pop in when their step enters view. */
+.js [data-reveal] .arch {
+    transform: scale(0.6) rotate(-6deg);
+    transition: transform 0.9s var(--ease-spring);
+}
+.js [data-reveal].is-in .arch {
+    transform: none;
+}
+/* Hero backdrop: sage-to-cream wash with a dotted texture. */
+.hero-bg {
+    background:
+        radial-gradient(50rem 28rem at 100% 0%, rgb(216 169 63 / 0.28), transparent 65%),
+        radial-gradient(46rem 30rem at 0% 100%, rgb(125 140 75 / 0.32), transparent 65%),
+        linear-gradient(180deg, #e2e8c6 0%, #eef0d9 55%, var(--color-paper) 100%);
+}
+.dots {
+    background-image: radial-gradient(var(--color-olive) 1.2px, transparent 1.4px);
+    background-size: 20px 20px;
+    mask-image: linear-gradient(180deg, #000, transparent 85%);
+}
+
+/* Little olives bobbing in the air. */
+.bob {
+    animation: bob 6s ease-in-out infinite;
+    animation-delay: calc(var(--d, 0) * -1.3s);
+}
+@keyframes bob {
+    0%, 100% { transform: translateY(0) rotate(-10deg); }
+    50% { transform: translateY(-22px) rotate(12deg); }
+}
+
+/* "How it works" sits on a soft sage band. */
+.tint-band {
+    background: linear-gradient(180deg, var(--color-paper), #eaedd2 30%, #eaedd2 70%, var(--color-paper));
+}
+/* Dark olive sections: deep green with golden and leaf-green glows. */
+.olive-night {
+    position: relative;
+    background:
+        radial-gradient(60rem 30rem at 85% -10%, rgb(125 140 75 / 0.35), transparent 60%),
+        radial-gradient(40rem 26rem at 5% 110%, rgb(216 169 63 / 0.18), transparent 60%),
+        linear-gradient(160deg, #2b3319, #1b2111);
+}
+.olive-night::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background-image: radial-gradient(rgb(244 242 231 / 0.07) 1px, transparent 1.2px);
+    background-size: 22px 22px;
+    mask-image: linear-gradient(180deg, #000, transparent 80%);
+}
+.olive-night > * {
+    position: relative;
+}
+
+/* "How it works" steps become soft cards that lift on hover. */
+.step-card {
+    padding: 2rem 1.5rem;
+    border-radius: 2rem;
+    background: rgb(255 255 255 / 0.5);
+    border: 1px solid var(--color-line);
+    transition: transform 0.5s var(--ease-soft), box-shadow 0.5s var(--ease-soft), background-color 0.3s;
+}
+@media (hover: hover) {
+    .step-card:hover {
+        transform: translateY(-8px);
+        background: rgb(255 255 255 / 0.85);
+        box-shadow: 0 30px 50px -30px rgb(56 67 30 / 0.5);
+    }
+}
