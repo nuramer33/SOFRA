@@ -23,6 +23,9 @@ class SecurityHeaders
         $response->headers->set('Referrer-Policy', 'strict-origin-when-cross-origin');
         $response->headers->set('Permissions-Policy', 'camera=(), microphone=(), geolocation=(), payment=()');
 
+        // Do not advertise the PHP version, whatever the host's php.ini says.
+        header_remove('X-Powered-By');
+
         // Private screens must never show up in search results.
         if ($request->is('dashboard', 'dashboard/*', 'admin', 'admin/*', 'login', 'register', 'forgot-password', 'reset-password/*', 'email/*', 'locale/*')) {
             $response->headers->set('X-Robots-Tag', 'noindex, nofollow');
