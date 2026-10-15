@@ -132,8 +132,9 @@ return [
         'update_date_on_publish' => true,
 
         // Skip the production "Are you sure?" on `php artisan migrate`, for
-        // hosts whose deploy hook runs it without --force (e.g. Wasmer).
-        'skip_production_prompt' => (bool) env('MIGRATE_WITHOUT_PROMPT', false),
+        // hosts whose deploy hook runs it without --force. On by default on
+        // Wasmer, detected by the PHPIX_PHP_THREADS variable its PHP sets.
+        'skip_production_prompt' => (bool) env('MIGRATE_WITHOUT_PROMPT', env('PHPIX_PHP_THREADS') !== null),
     ],
 
     /*
