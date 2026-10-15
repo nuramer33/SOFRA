@@ -88,6 +88,7 @@ return [
         'monthly_price' => env('SOFRA_MONTHLY_PRICE', '$12'), // shown on the landing page
         'support_whatsapp' => env('SOFRA_SUPPORT_WHATSAPP'), // digits, e.g. 905551234567
         'support_email' => env('SOFRA_SUPPORT_EMAIL'),
+        'support_instagram' => env('SOFRA_SUPPORT_INSTAGRAM', 'norha_ndesign'), // handle without the @
     ],
 
     // Nightly backup (php artisan sofra:backup): database dump + uploaded images.

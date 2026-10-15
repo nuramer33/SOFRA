@@ -1,8 +1,9 @@
 {{-- One product in the list. Expects $product, $category, $shop, $searchText, $loop. --}}
-<li id="product-{{ $product->id }}"
+<li id="product-{{ $product->id }}" data-sort-id="{{ $product->id }}"
     x-show="matches(@js($searchText($product)), {{ $category->id }})"
     x-data="availabilityToggle({ url: @js(route('products.availability', $product)), on: @js($product->is_available), failedMessage: @js(__('app.products.toggle_failed')) })"
-    class="flex items-center gap-3 px-3 py-3 sm:gap-4 sm:px-4">
+    class="flex items-center gap-3 bg-paper px-3 py-3 transition-shadow sm:gap-4 sm:px-4">
+    <x-drag-handle />
 
     <a href="{{ route('products.edit', $product) }}" class="flex min-w-0 flex-1 items-center gap-3 sm:gap-4">
         <x-thumb :src="$product->imageUrl('sm')" :label="$product->name"

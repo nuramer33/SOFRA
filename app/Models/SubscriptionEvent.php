@@ -21,6 +21,8 @@ class SubscriptionEvent extends Model
 
     public const ACTIVATION = 'activation';
 
+    public const PASSWORD_RESET = 'password_reset';
+
     // Written by the Stripe webhook (no administrator involved).
     public const SUBSCRIBED = 'subscribed';
 

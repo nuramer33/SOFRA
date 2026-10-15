@@ -28,6 +28,38 @@ trait Sortable
     }
 
     /**
+     * Drag-and-drop ordering: put `$ids` first, in that order, then number
+     * 0..n. Ids outside the scope (another shop's, say) are ignored and rows
+     * not listed keep their current relative order at the end.
+     *
+     * @param  list<int>  $ids
+     * @param  Builder<static>|null  $siblings  The rows being ordered; defaults to every row the current shop can see.
+     */
+    public static function arrange(array $ids, ?Builder $siblings = null): void
+    {
+        DB::transaction(function () use ($ids, $siblings) {
+            $rows = ($siblings ?? static::query())
+                ->orderBy('sort_order')->orderBy('id')
+                ->lockForUpdate()
+                ->get()
+                ->keyBy('id');
+
+            $ordered = collect($ids)->unique()->filter(fn ($id) => $rows->has($id))
+                ->concat($rows->keys()->diff($ids))
+                ->values();
+
+            foreach ($ordered as $position => $id) {
+                $row = $rows[$id];
+
+                if ($row->sort_order !== $position) {
+                    $row->sort_order = $position;
+                    $row->save();
+                }
+            }
+        });
+    }
+
+    /**
      * @param  'up'|'down'  $direction
      */
     public function move(string $direction): void

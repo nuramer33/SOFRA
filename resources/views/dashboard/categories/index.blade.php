@@ -18,9 +18,11 @@
             </x-slot:action>
         </x-empty-state>
     @else
-        <ol class="space-y-3">
+        <ol class="space-y-3" x-data="sortable({ url: @js(route('categories.reorder')), failedMessage: @js(__('app.actions.reorder_failed')) })"
+            @pointermove="move($event)" @pointerup="end()" @pointercancel="end()">
             @foreach ($categories as $category)
-                <li id="category-{{ $category->id }}" class="reveal card flex items-center gap-3 p-3 sm:gap-4 sm:p-4" style="--i: {{ min($loop->index, 8) }}">
+                <li id="category-{{ $category->id }}" data-sort-id="{{ $category->id }}" class="reveal card flex items-center gap-3 p-3 transition-shadow sm:gap-4 sm:p-4" style="--i: {{ min($loop->index, 8) }}">
+                    <x-drag-handle />
                     <x-move-buttons :action="route('categories.position', $category)" :first="$loop->first" :last="$loop->last" />
 
                     <a href="{{ route('categories.edit', $category) }}" class="flex min-w-0 flex-1 items-center gap-3 sm:gap-4">

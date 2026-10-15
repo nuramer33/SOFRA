@@ -83,7 +83,7 @@ Route::middleware('auth')->group(function () {
 });
 
 /*
-| Shop dashboard — `tenant` locks every query (and every {model} in the URL)
+| Shop dashboard â€” `tenant` locks every query (and every {model} in the URL)
 | to the owner's shop.
 */
 Route::middleware(['auth', 'tenant', 'subscribed'])->prefix('dashboard')->group(function () {
@@ -101,6 +101,8 @@ Route::middleware(['auth', 'tenant', 'subscribed'])->prefix('dashboard')->group(
     Route::put('ordering', [OrderingController::class, 'update'])->name('ordering.update');
     Route::patch('ordering/pause', [OrderingController::class, 'pause'])->name('ordering.pause');
 
+    Route::put('categories/order', [PositionController::class, 'reorderCategories'])->name('categories.reorder');
+    Route::put('categories/{category}/products/order', [PositionController::class, 'reorderProducts'])->whereNumber('category')->name('products.reorder');
     Route::resource('categories', CategoryController::class)->except('show');
     Route::patch('categories/{category}/position', [PositionController::class, 'category'])->name('categories.position');
 
@@ -128,7 +130,7 @@ Route::middleware(['auth', 'tenant', 'subscribed'])->prefix('dashboard')->group(
 });
 
 /*
-| Platform admin — only accounts made with `php artisan sofra:admin`.
+| Platform admin â€” only accounts made with `php artisan sofra:admin`.
 | Everyone else gets a 404 (see EnsureUserIsAdmin).
 */
 Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
@@ -138,6 +140,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::patch('shops/{shop}/status', [Admin\ShopStatusController::class, 'update'])->whereNumber('shop')->name('shops.status');
     Route::post('shops/{shop}/extensions', [Admin\ShopExtensionController::class, 'store'])->whereNumber('shop')->name('shops.extensions');
     Route::post('shops/{shop}/payments', [Admin\ShopPaymentController::class, 'store'])->whereNumber('shop')->name('shops.payments');
+    Route::post('shops/{shop}/users/{user}/password', [Admin\ShopUserPasswordController::class, 'update'])->whereNumber(['shop', 'user'])->name('shops.users.password');
 });
 
 /*

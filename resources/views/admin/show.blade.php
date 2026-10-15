@@ -137,6 +137,13 @@
             {{-- Accounts --}}
             <section class="reveal card p-6" style="--i: 2">
                 <h2 class="font-display text-xl font-semibold">{{ __('app.admin.accounts') }}</h2>
+                @if (session('temporary_password'))
+                    <div class="mt-4 rounded-2xl bg-saffron/20 p-4 text-sm">
+                        <p>{{ session('status') }}</p>
+                        <p class="mt-2 select-all font-mono text-lg font-semibold" dir="ltr">{{ session('temporary_password') }}</p>
+                        <p class="mt-1 text-xs text-ink-mute">{{ __('billing.admin.password_once') }}</p>
+                    </div>
+                @endif
                 <ul class="mt-4 space-y-4">
                     @foreach ($shop->users as $user)
                         <li class="flex items-start gap-3">
@@ -151,6 +158,12 @@
                                 <a href="mailto:{{ $user->email }}" class="block truncate text-sm text-ink-soft hover:text-clay rtl:text-right" dir="ltr">{{ $user->email }}</a>
                                 <p class="text-xs text-ink-mute">{{ __('app.admin.registered') }}: {{ $dateTime($user->created_at) }}</p>
                                 <p class="text-xs text-ink-mute">{{ __('app.admin.last_login') }}: {{ $user->last_login_at ? $dateTime($user->last_login_at) : __('app.admin.never') }}</p>
+                                @if (! $user->isAdmin())
+                                    <form method="POST" action="{{ route('admin.shops.users.password', [$shop, $user]) }}" class="mt-2" onsubmit="return confirm('{{ addslashes(__('billing.admin.password_confirm')) }}')">
+                                        @csrf
+                                        <button class="text-xs font-medium text-clay hover:underline">{{ __('billing.admin.password_button') }}</button>
+                                    </form>
+                                @endif
                             </div>
                         </li>
                     @endforeach

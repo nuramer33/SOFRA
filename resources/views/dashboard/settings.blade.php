@@ -3,15 +3,49 @@
     $enabled = old('enabled_locales', $shop->contentLocales());
     $color = strtolower(old('brand_color', $shop->brand_color));
     $host = parse_url(config('app.url'), PHP_URL_HOST);
+    $tabFields = [
+        'store' => ['name', 'tagline', 'logo', 'brand_color', 'address', 'hours', 'maps_url', 'instagram'],
+        'orders' => ['whatsapp_number', 'currency', 'order_types', 'delivery_fee', 'min_order'],
+        'languages' => ['enabled_locales', 'default_locale'],
+        'look' => ['template'],
+        'advanced' => ['slug', 'analytics_retention_days'],
+    ];
+    $startTab = collect($tabFields)->search(fn ($fields) => collect($errors->keys())->contains(
+        fn ($key) => collect($fields)->contains(fn ($field) => $key === $field || str_starts_with($key, $field.'.'))
+    )) ?: 'store';
 @endphp
 <x-layouts.dashboard :title="__('app.settings.title')">
     <x-page-header :title="__('app.settings.title')" :subtitle="__('app.settings.subtitle')" />
 
-    <form method="POST" action="{{ route('settings.update') }}" enctype="multipart/form-data"
-          x-data="{ lang: @js($shop->default_locale), busy: false }" @submit="busy = true" class="space-y-4 lg:space-y-6">
+    <form method="POST" action="{{ route('settings.update') }}" enctype="multipart/form-data" novalidate
+          x-data="{
+              lang: @js($shop->default_locale), busy: false, tab: @js($startTab),
+              tabs: ['store', 'orders', 'languages', 'look', 'advanced'],
+              go(tab) { this.tab = tab; history.replaceState(null, '', '#' + tab); },
+              check($event) {
+                  const bad = this.$el.querySelector(':invalid');
+                  if (!bad) { this.busy = true; return; }
+                  $event.preventDefault();
+                  this.tab = bad.closest('[data-tab]')?.dataset.tab ?? this.tab;
+                  this.$nextTick(() => this.$el.reportValidity());
+              },
+          }"
+          x-init="const hash = location.hash.slice(1).replace('analytics', 'advanced'); if (tabs.includes(hash)) { tab = hash; $nextTick(() => document.getElementById(hash)?.scrollIntoView()); }"
+          @submit="check($event)" class="space-y-4 lg:space-y-6">
         @csrf
         @method('PUT')
 
+        {{-- Section tabs: every field stays in the one form, so a single Save keeps everything --}}
+        <div role="tablist" aria-label="{{ __('app.settings.title') }}" class="-mx-4 flex gap-2 overflow-x-auto px-4 pb-1 sm:mx-0 sm:px-0">
+            @foreach (array_keys($tabFields) as $tabName)
+                <button type="button" role="tab" @click="go(@js($tabName))" :aria-selected="(tab === @js($tabName)).toString()"
+                        class="shrink-0 rounded-full px-4 py-2.5 text-sm font-medium ring-1 transition"
+                        :class="tab === @js($tabName) ? 'bg-ink text-paper ring-ink' : 'bg-white/60 text-ink-soft ring-line hover:text-ink'">
+                    {{ __('app.settings.tabs.'.$tabName) }}
+                </button>
+            @endforeach
+        </div>
+        <div x-show="tab === 'store'" data-tab="store" role="tabpanel" class="space-y-4 lg:space-y-6">
         {{-- Identity ------------------------------------------------------- --}}
         <x-settings-section :title="__('app.settings.section_identity')" :text="__('app.settings.section_identity_text')" :i="1">
             <x-locale-tabs :locales="$locales" :fields="['name', 'tagline']" />
@@ -94,7 +128,9 @@
                          :value="$shop->instagram" dir="ltr" autocapitalize="none" autocorrect="off" maxlength="60" placeholder="kahveevi" />
             </div>
         </x-settings-section>
+        </div>
 
+        <div x-show="tab === 'orders'" data-tab="orders" role="tabpanel" class="space-y-4 lg:space-y-6" x-cloak>
         {{-- Orders ---------------------------------------------------------- --}}
         <x-settings-section id="orders" :title="__('app.settings.section_orders')" :text="__('app.settings.section_orders_text')" :i="2">
             <div class="grid gap-5 sm:grid-cols-2">
@@ -164,7 +200,9 @@
                          :value="$shop->min_order !== null ? rtrim(rtrim($shop->min_order, '0'), '.') : null" dir="ltr" inputmode="decimal" min="0" step="any" />
             </div>
         </x-settings-section>
+        </div>
 
+        <div x-show="tab === 'languages'" data-tab="languages" role="tabpanel" class="space-y-4 lg:space-y-6" x-cloak>
         {{-- Languages ------------------------------------------------------- --}}
         <x-settings-section :title="__('app.settings.section_languages')" :text="__('app.settings.section_languages_text')" :i="3">
             <fieldset>
@@ -212,28 +250,9 @@
                 <x-locale-switcher />
             </div>
         </x-settings-section>
+        </div>
 
-        {{-- Link ------------------------------------------------------------ --}}
-        <x-settings-section :title="__('app.settings.section_link')" :text="__('app.settings.section_link_text')" :i="4">
-            <x-field name="slug" :label="__('app.auth.slug')" :hint="__('app.auth.slug_hint')">
-                <x-slot:input>
-                    <div dir="ltr" @class([
-                            'field flex items-center p-0 focus-within:border-clay focus-within:bg-white focus-within:ring-4 focus-within:ring-clay/15',
-                            '!border-danger' => $errors->has('slug'),
-                        ])>
-                        <span class="ps-4 text-ink-mute select-none">{{ $host }}/</span>
-                        <input id="slug" name="slug" value="{{ old('slug', $shop->slug) }}" required minlength="3" maxlength="40"
-                               autocapitalize="none" autocorrect="off" spellcheck="false"
-                               @if ($errors->has('slug')) aria-invalid="true" @endif
-                               class="min-w-0 flex-1 bg-transparent py-3.5 pe-4 font-medium outline-none">
-                    </div>
-                </x-slot:input>
-            </x-field>
-            <p class="flex items-start gap-2 rounded-2xl bg-saffron/15 px-4 py-3 text-sm text-clay-deep">
-                <x-icon name="qr" class="mt-0.5 size-4" /> {{ __('app.settings.slug_warning') }}
-            </p>
-        </x-settings-section>
-
+        <div x-show="tab === 'look'" data-tab="look" role="tabpanel" class="space-y-4 lg:space-y-6" x-cloak>
         {{-- Menu look ------------------------------------------------------- --}}
         <x-settings-section :title="__('templates.title')" :text="__('templates.text')" :i="5">
             <fieldset>
@@ -267,6 +286,29 @@
                 @error('template') <p class="mt-2 text-sm text-danger">{{ $message }}</p> @enderror
             </fieldset>
         </x-settings-section>
+        </div>
+
+        <div x-show="tab === 'advanced'" data-tab="advanced" role="tabpanel" class="space-y-4 lg:space-y-6" x-cloak>
+        {{-- Link ------------------------------------------------------------ --}}
+        <x-settings-section :title="__('app.settings.section_link')" :text="__('app.settings.section_link_text')" :i="4">
+            <x-field name="slug" :label="__('app.auth.slug')" :hint="__('app.auth.slug_hint')">
+                <x-slot:input>
+                    <div dir="ltr" @class([
+                            'field flex items-center p-0 focus-within:border-clay focus-within:bg-white focus-within:ring-4 focus-within:ring-clay/15',
+                            '!border-danger' => $errors->has('slug'),
+                        ])>
+                        <span class="ps-4 text-ink-mute select-none">{{ $host }}/</span>
+                        <input id="slug" name="slug" value="{{ old('slug', $shop->slug) }}" required minlength="3" maxlength="40"
+                               autocapitalize="none" autocorrect="off" spellcheck="false"
+                               @if ($errors->has('slug')) aria-invalid="true" @endif
+                               class="min-w-0 flex-1 bg-transparent py-3.5 pe-4 font-medium outline-none">
+                    </div>
+                </x-slot:input>
+            </x-field>
+            <p class="flex items-start gap-2 rounded-2xl bg-saffron/15 px-4 py-3 text-sm text-clay-deep">
+                <x-icon name="qr" class="mt-0.5 size-4" /> {{ __('app.settings.slug_warning') }}
+            </p>
+        </x-settings-section>
 
         {{-- Analytics retention --------------------------------------------- --}}
         <x-settings-section id="analytics" :title="__('analytics.section_title')" :text="__('analytics.section_text')" :i="6">
@@ -285,6 +327,7 @@
                 </x-slot:input>
             </x-field>
         </x-settings-section>
+        </div>
 
         <div class="sticky bottom-24 z-10 flex justify-end rounded-full bg-paper/90 p-2 shadow-lg ring-1 ring-line backdrop-blur lg:bottom-6">
             <button type="submit" class="btn btn-primary min-w-40" :disabled="busy">

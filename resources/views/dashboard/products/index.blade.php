@@ -76,7 +76,8 @@
                         @if ($category->products->isEmpty())
                             <p class="rounded-3xl border border-dashed border-line px-5 py-6 text-center text-sm text-ink-mute">{{ __('app.products.empty_category') }}</p>
                         @else
-                            <ul class="card divide-y divide-line/70 overflow-visible">
+                            <ul class="card divide-y divide-line/70 overflow-visible" x-data="sortable({ url: @js(route('products.reorder', $category)), failedMessage: @js(__('app.actions.reorder_failed')) })"
+                                @pointermove="move($event)" @pointerup="end()" @pointercancel="end()">
                                 @foreach ($category->products as $product)
                                     @include('dashboard.products._row')
                                 @endforeach

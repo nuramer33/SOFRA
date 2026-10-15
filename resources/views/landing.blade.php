@@ -401,6 +401,12 @@
                 @elseif (config('sofra.billing.support_email'))
                     <a href="mailto:{{ config('sofra.billing.support_email') }}" class="transition hover:text-clay">{{ __('legal.footer.contact') }}</a>
                 @endif
+                @if (config('sofra.billing.support_instagram'))
+                    <a href="https://instagram.com/{{ config('sofra.billing.support_instagram') }}" target="_blank" rel="noopener"
+                       class="inline-flex items-center gap-1.5 transition hover:text-clay" aria-label="Instagram">
+                        <x-icon name="instagram" class="size-4" /> <span dir="ltr">{{ '@'.config('sofra.billing.support_instagram') }}</span>
+                    </a>
+                @endif
             </nav>
             <p>© {{ date('Y') }} {{ __('app.brand') }}</p>
         </div>

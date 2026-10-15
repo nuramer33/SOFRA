@@ -412,5 +412,107 @@ Alpine.data('brandPicker', (initial) => ({
     },
 }));
 
+/**
+ * Drag-and-drop ordering for a list. Put x-data="sortable({ url, failedMessage })"
+ * on the <ol>/<ul>, `data-sort-id` on each item and `data-handle` on its grip.
+ * Pointer events, so the same code serves mouse and touch. The new order is
+ * saved when the item is dropped; the up/down buttons keep working too.
+ */
+Alpine.data('sortable', ({ url, failedMessage }) => ({
+    drag: null,
+
+    rows() {
+        return [...this.$el.querySelectorAll(':scope > [data-sort-id]')];
+    },
+
+    start(event) {
+        if (event.button !== undefined && event.button !== 0) return;
+        const item = event.target.closest('[data-sort-id]');
+        if (!item) return;
+
+        event.preventDefault();
+        event.currentTarget.setPointerCapture(event.pointerId);
+
+        // The dragged row follows the pointer with a transform and the others
+        // slide out of the way; the DOM is only reordered on drop (moving nodes
+        // mid-drag would cancel the pointer capture on touch screens).
+        const items = this.rows().filter((row) => row.offsetParent !== null);
+        const page = (el) => el.getBoundingClientRect().top + window.scrollY;
+        const mid = items.map((row) => page(row) + row.offsetHeight / 2);
+        const index = items.indexOf(item);
+
+        this.drag = {
+            item, items, index, mid,
+            startY: event.clientY,
+            startScroll: window.scrollY,
+            newIndex: index,
+            order: this.rows().map((row) => row.dataset.sortId).join(),
+            gap: items.length > 1 ? Math.max(0, page(items[1]) - page(items[0]) - items[0].offsetHeight) : 0,
+        };
+
+        items.forEach((row) => { row.style.transition = row === item ? 'none' : 'transform 160ms ease'; });
+        item.classList.add('z-10', 'shadow-xl', 'ring-2', 'ring-clay/40', 'relative');
+    },
+
+    move(event) {
+        const drag = this.drag;
+        if (!drag) return;
+
+        if (event.clientY < 70) window.scrollBy(0, -14);
+        else if (event.clientY > window.innerHeight - 70) window.scrollBy(0, 14);
+
+        const dy = event.clientY - drag.startY + (window.scrollY - drag.startScroll);
+        drag.item.style.transform = `translateY(${dy}px)`;
+
+        const center = drag.mid[drag.index] + dy;
+        drag.newIndex = drag.mid.filter((value, i) => i !== drag.index && value < center).length;
+
+        const shift = drag.item.offsetHeight + drag.gap;
+        drag.items.forEach((row, i) => {
+            if (row === drag.item) return;
+            let offset = 0;
+            if (i > drag.index && i <= drag.newIndex) offset = -shift;
+            if (i < drag.index && i >= drag.newIndex) offset = shift;
+            row.style.transform = offset ? `translateY(${offset}px)` : '';
+        });
+    },
+
+    async end() {
+        const drag = this.drag;
+        if (!drag) return;
+        this.drag = null;
+
+        drag.items.forEach((row) => { row.style.transform = ''; row.style.transition = ''; });
+        drag.item.classList.remove('z-10', 'shadow-xl', 'ring-2', 'ring-clay/40', 'relative');
+
+        if (drag.newIndex === drag.index) return;
+
+        const others = drag.items.filter((row) => row !== drag.item);
+        if (drag.newIndex >= others.length) others.at(-1).after(drag.item);
+        else others[drag.newIndex].before(drag.item);
+
+        const rows = this.rows();
+        const ids = rows.map((row) => Number(row.dataset.sortId));
+
+        try {
+            const response = await fetch(url, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json', Accept: 'application/json', 'X-CSRF-TOKEN': csrfToken() },
+                body: JSON.stringify({ ids }),
+            });
+            if (!response.ok) throw new Error(response.statusText);
+
+            // Keep the up/down buttons truthful about first / last.
+            rows.forEach((row, position) => {
+                row.querySelectorAll('input[name="direction"]').forEach((input) => {
+                    const button = input.nextElementSibling;
+                    if (button) button.disabled = input.value === 'up' ? position === 0 : position === rows.length - 1;
+                });
+            });
+        } catch {
+            Alpine.store('toast').push(failedMessage, 'error');
+        }
+    },
+}));
 window.Alpine = Alpine;
 Alpine.start();

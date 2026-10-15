@@ -5,6 +5,7 @@
     // `match` decides which item is highlighted (e.g. products.edit → Products).
     $nav = [
         ['label' => __('app.nav.overview'), 'icon' => 'home', 'route' => 'dashboard', 'match' => 'dashboard'],
+        ['label' => __('quick.today.title'), 'icon' => 'clock', 'route' => 'today', 'match' => 'today'],
         ['label' => __('app.nav.categories'), 'icon' => 'grid', 'route' => 'categories.index', 'match' => 'categories.*'],
         ['label' => __('app.nav.products'), 'icon' => 'cup', 'route' => 'products.index', 'match' => 'products.*'],
         ['label' => __('analytics.nav'), 'icon' => 'chart', 'route' => 'analytics.index', 'match' => 'analytics.*'],
@@ -12,8 +13,22 @@
         ['label' => __('app.nav.qr'), 'icon' => 'qr', 'route' => 'qr.show', 'match' => 'qr.*'],
         ['label' => __('app.nav.settings'), 'icon' => 'settings', 'route' => 'settings.edit', 'match' => 'settings.*'],
     ];
+
+    // Phone tab bar: the daily screens stay one tap away, the rest live under "More".
+    $tabRoutes = ['dashboard', 'today', 'products.index', 'analytics.index'];
+    $tabs = array_values(array_filter($nav, fn ($item) => in_array($item['route'], $tabRoutes, true)));
+    $more = array_values(array_filter($nav, fn ($item) => ! in_array($item['route'], $tabRoutes, true)));
+    $moreActive = collect($more)->contains(fn ($item) => request()->routeIs($item['match']));
 @endphp
 <x-layouts.base :title="$title ?? __('app.dashboard.title')">
+    <x-slot:head>
+        <link rel="manifest" href="/manifest.webmanifest">
+        <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-title" content="Sofra">
+    </x-slot:head>
+
     <x-toasts />
 
     {{-- Desktop sidebar ------------------------------------------------ --}}
@@ -47,6 +62,7 @@
                 <x-icon name="external" class="size-4 text-ink-mute transition group-hover:text-clay" />
             </a>
             <div class="flex items-center justify-between gap-2">
+                <button type="button" data-install hidden class="grid size-10 place-items-center rounded-full text-ink-soft transition hover:bg-paper hover:text-clay" title="{{ __('app.nav.install') }}" aria-label="{{ __('app.nav.install') }}"><x-icon name="download" /></button>
                 <a href="{{ route('account.edit') }}" class="grid size-10 place-items-center rounded-full text-ink-soft transition hover:bg-paper hover:text-clay"
                    title="{{ __('account.link') }}" aria-label="{{ __('account.link') }}"><x-icon name="user" /></a>
                 <form method="POST" action="{{ route('logout') }}">
@@ -68,6 +84,7 @@
                 <p class="truncate font-medium rtl:text-right" dir="auto">{{ $shop->name }}</p>
             </div>
             <div class="flex items-center gap-1">
+                <button type="button" data-install hidden class="grid size-10 place-items-center rounded-full text-ink-soft transition hover:bg-paper hover:text-clay" title="{{ __('app.nav.install') }}" aria-label="{{ __('app.nav.install') }}"><x-icon name="download" /></button>
                 <a href="{{ route('account.edit') }}" class="grid size-10 place-items-center rounded-full text-ink-soft active:bg-sand" aria-label="{{ __('account.link') }}"><x-icon name="user" /></a>
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf
@@ -90,13 +107,25 @@
 
     {{-- Mobile bottom tab bar ------------------------------------------- --}}
     <nav class="vt-tabbar pb-safe fixed inset-x-0 bottom-0 z-30 border-t border-line bg-paper/95 px-2 pt-2 backdrop-blur-md lg:hidden"
-         aria-label="{{ __('app.nav.menu') }}">
-        <ul class="grid grid-cols-7">
-            @foreach ($nav as $item)
+         aria-label="{{ __('app.nav.menu') }}" x-data="{ more: false }" @keydown.escape.window="more = false" @click.outside="more = false">
+        <div x-show="more" x-cloak x-transition.origin.bottom
+             class="absolute inset-x-3 bottom-full mb-2 overflow-hidden rounded-3xl bg-paper p-2 shadow-xl ring-1 ring-line">
+            @foreach ($more as $item)
+                @php($active = request()->routeIs($item['match']))
+                <a href="{{ route($item['route']) }}" @if ($active) aria-current="page" @endif
+                   @class(['flex items-center gap-3 rounded-2xl px-4 py-3 font-medium transition active:bg-sand',
+                           'text-clay bg-clay-soft' => $active, 'text-ink-soft' => ! $active])>
+                    <x-icon :name="$item['icon']" /> {{ $item['label'] }}
+                </a>
+            @endforeach
+        </div>
+
+        <ul class="grid grid-cols-5">
+            @foreach ($tabs as $item)
                 @php($active = request()->routeIs($item['match']))
                 <li class="min-w-0">
                     <a href="{{ route($item['route']) }}" @if ($active) aria-current="page" @endif
-                       @class(['flex flex-col items-center gap-1 rounded-2xl px-0.5 py-1.5 text-[10px] leading-tight font-medium transition active:scale-95',
+                       @class(['flex flex-col items-center gap-1 rounded-2xl px-0.5 py-1.5 text-[11px] leading-tight font-medium transition active:scale-95',
                                'text-clay' => $active, 'text-ink-soft' => ! $active])>
                         <span @class(['grid h-8 w-12 place-items-center rounded-full transition-colors duration-300', 'bg-clay-soft' => $active])>
                             <x-icon :name="$item['icon']" />
@@ -105,6 +134,56 @@
                     </a>
                 </li>
             @endforeach
+            <li class="min-w-0">
+                <button type="button" @click="more = !more" :aria-expanded="more.toString()"
+                        @class(['flex w-full flex-col items-center gap-1 rounded-2xl px-0.5 py-1.5 text-[11px] leading-tight font-medium transition active:scale-95',
+                                'text-clay' => $moreActive, 'text-ink-soft' => ! $moreActive])>
+                    <span @class(['grid h-8 w-12 place-items-center rounded-full transition-colors duration-300', 'bg-clay-soft' => $moreActive])>
+                        <x-icon name="dots" />
+                    </span>
+                    <span class="max-w-full truncate">{{ __('app.nav.more_menu') }}</span>
+                </button>
+            </li>
         </ul>
     </nav>
-</x-layouts.base>
+
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/sw.js').catch(() => {});
+        }
+
+        (() => {
+            const buttons = document.querySelectorAll('[data-install]');
+            const standalone = matchMedia('(display-mode: standalone)').matches || navigator.standalone;
+            const isIos = /iphone|ipad|ipod/i.test(navigator.userAgent);
+            let deferredPrompt = null;
+
+            if (standalone) {
+                return;
+            }
+
+            const show = () => buttons.forEach((button) => { button.hidden = false; });
+
+            window.addEventListener('beforeinstallprompt', (event) => {
+                event.preventDefault();
+                deferredPrompt = event;
+                show();
+            });
+            window.addEventListener('appinstalled', () => buttons.forEach((button) => { button.hidden = true; }));
+
+            if (isIos) {
+                show();
+            }
+
+            buttons.forEach((button) => button.addEventListener('click', async () => {
+                if (deferredPrompt) {
+                    deferredPrompt.prompt();
+                    await deferredPrompt.userChoice;
+                    deferredPrompt = null;
+                    buttons.forEach((other) => { other.hidden = true; });
+                } else {
+                    alert(@js(__('app.nav.install_ios')));
+                }
+            }));
+        })();
+    </script></x-layouts.base>
