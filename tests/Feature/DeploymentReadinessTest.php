@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Process;
@@ -112,6 +113,16 @@ class DeploymentReadinessTest extends TestCase
 
         $this->assertFileDoesNotExist($old);
         $this->assertFileExists($stranger); // only our own backup files are ever touched
+    }
+
+    public function test_unattended_migrate_runs_in_production_without_force(): void
+    {
+        $this->app['env'] = 'production';
+
+        $exitCode = Artisan::call('migrate', ['--no-interaction' => true]);
+
+        $this->assertSame(0, $exitCode);
+        $this->assertStringNotContainsString('APPLICATION IN PRODUCTION', Artisan::output());
     }
 
     public function test_mail_test_command_sends_a_message(): void

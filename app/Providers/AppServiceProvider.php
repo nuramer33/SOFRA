@@ -2,10 +2,13 @@
 
 namespace App\Providers;
 
+use App\Console\UnattendedMigrateCommand;
 use App\Tenancy\CurrentShop;
 use Illuminate\Auth\Events\Login;
 use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Auth\Notifications\VerifyEmail;
+use Illuminate\Contracts\Events\Dispatcher;
+use Illuminate\Database\Console\Migrations\MigrateCommand;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Support\Facades\Event;
@@ -34,6 +37,13 @@ class AppServiceProvider extends ServiceProvider
             autoOrientation: true,
             decodeAnimation: false,
             strip: true,
+        ));
+
+        // Deploy hooks run `php artisan migrate` with no terminal to answer
+        // the production prompt; see UnattendedMigrateCommand.
+        $this->app->extend(MigrateCommand::class, fn (MigrateCommand $command, $app) => new UnattendedMigrateCommand(
+            $app['migrator'],
+            $app[Dispatcher::class],
         ));
     }
 
