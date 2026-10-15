@@ -130,6 +130,10 @@ return [
     'migrations' => [
         'table' => 'migrations',
         'update_date_on_publish' => true,
+
+        // Skip the production "Are you sure?" on `php artisan migrate`, for
+        // hosts whose deploy hook runs it without --force (e.g. Wasmer).
+        'skip_production_prompt' => (bool) env('MIGRATE_WITHOUT_PROMPT', false),
     ],
 
     /*
