@@ -34,6 +34,7 @@
 <x-layouts.base :exact-title="__('app.brand').' — '.__('app.tagline')" :scripts="['resources/js/landing.js']" body-class="grain landing-olive overflow-x-clip">
     <x-slot:head>
         <x-seo :title="__('app.brand').' — '.__('app.tagline')" :description="$t('hero.subtitle')" :url="route('home')" :json-ld="$jsonLd" />        <script>document.documentElement.classList.add('js');</script>
+        <link rel="manifest" href="/manifest.webmanifest">
     </x-slot:head>
 
     <div class="scroll-progress" aria-hidden="true"></div>
@@ -53,7 +54,7 @@
                 @guest
                     <a href="{{ route('login') }}" class="hidden rounded-full px-3.5 py-2 text-sm font-medium text-ink-soft transition hover:text-ink sm:block">{{ $t('nav.login') }}</a>
                 @endguest
-                <a href="{{ $start }}" class="btn btn-primary px-4 py-2.5 text-sm">{{ $startLabel }}</a>
+                <a href="{{ $start }}" class="btn btn-primary px-4 py-2.5 text-sm whitespace-nowrap">{{ $startLabel }}</a>
             </div>
         </div>
     </header>
@@ -73,10 +74,7 @@
             </div>
             <div class="mx-auto grid max-w-6xl items-center gap-14 px-5 pt-10 pb-20 sm:px-8 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] lg:pt-16 lg:pb-28">
                 <div class="text-center lg:text-start">
-                    <p class="hero-in eyebrow inline-flex items-center gap-2 rounded-full bg-clay-soft px-3 py-1.5" style="--i: 0">
-                        <x-icon name="sparkle" class="size-3.5" /> {{ $t('hero.eyebrow') }}
-                    </p>
-                    <h1 class="mt-6 font-display text-[2.6rem] leading-[1.15] font-semibold text-balance sm:text-6xl lg:text-[4.1rem]">
+                    <h1 class="font-display text-[2.6rem] leading-[1.15] font-semibold text-balance sm:text-6xl lg:text-[4.1rem]">
                         @foreach (explode(' ', $t('hero.title')) as $i => $word)
                             <span class="word-mask"><span style="--w: {{ $i }}">{{ $word }}</span></span>
                         @endforeach
@@ -328,6 +326,21 @@
             </div>
         </section>
 
+        {{-- Get the app ---------------------------------------------------- --}}
+        <section id="app" class="scroll-mt-20 px-5 pb-24 sm:px-8 lg:pb-32">
+            <div data-reveal class="mx-auto flex max-w-3xl flex-col items-center gap-6 rounded-[2.5rem] bg-clay-soft p-8 text-center sm:flex-row sm:p-10 sm:text-start">
+                <span class="grid size-20 shrink-0 place-items-center rounded-3xl bg-clay text-paper"><x-icon name="download" class="size-9" /></span>
+                <div class="flex-1">
+                    <p class="eyebrow">{{ $t('install.eyebrow') }}</p>
+                    <h2 class="mt-1 font-display text-3xl font-semibold text-balance">{{ $t('install.title') }}</h2>
+                    <p class="mt-2 text-ink-soft">{{ $t('install.text') }}</p>
+                    <button type="button" data-install class="btn btn-primary mt-5 px-6 py-3 whitespace-nowrap"><x-icon name="download" class="size-5" /> {{ $t('install.button') }}</button>
+                    <p data-install-hint class="mt-3 text-sm text-ink-mute" hidden>{{ $t('install.android') }}<br>{{ $t('install.ios') }}</p>
+                    <p data-install-done class="mt-4 text-sm font-semibold text-olive" hidden>{{ $t('install.done') }}</p>
+                </div>
+            </div>
+        </section>
+
         {{-- Pricing ------------------------------------------------------- --}}
         <section id="pricing" class="scroll-mt-20 px-5 pb-24 sm:px-8 lg:pb-32">
             <div data-reveal class="relative mx-auto max-w-3xl overflow-hidden rounded-[2.5rem] olive-night p-8 text-paper sm:p-12">
@@ -340,7 +353,18 @@
                 </div>
                 <p class="mt-2 text-paper/75">{{ $monthlyPrice ? $t('pricing.then', ['price' => $monthlyPrice]) : $t('pricing.then_generic') }}</p>
                 @if ($monthlyPrice && $yearlyPrice)
-                    <p class="mt-3 inline-flex rounded-full bg-paper/15 px-4 py-1.5 text-sm font-semibold text-saffron">{{ $t('pricing.yearly', ['price' => $yearlyPrice]) }}</p>
+                    <div class="mt-7 grid gap-4 sm:grid-cols-2">
+                        <div class="rounded-3xl border border-paper/15 bg-paper/5 p-5">
+                            <p class="text-sm font-semibold text-paper/70">{{ $t('pricing.plan_month') }}</p>
+                            <p class="mt-2 font-display text-4xl font-semibold" dir="ltr">{{ $monthlyPrice }} <span class="text-sm font-normal text-paper/60">{{ $t('pricing.per_month') }}</span></p>
+                        </div>
+                        <div class="relative rounded-3xl border-2 border-saffron bg-saffron/15 p-5 shadow-[0_0_40px_-8px_var(--color-saffron)]">
+                            <span class="absolute -top-3 start-5 inline-flex items-center gap-1.5 rounded-full bg-saffron px-3 py-1 text-xs font-bold text-ink"><x-icon name="sparkle" class="size-3" /> {{ $t('pricing.best') }}</span>
+                            <p class="text-sm font-semibold text-saffron">{{ $t('pricing.plan_year') }}</p>
+                            <p class="mt-2 font-display text-4xl font-semibold" dir="ltr">{{ $yearlyPrice }} <span class="text-sm font-normal text-paper/70">{{ $t('pricing.per_year') }}</span></p>
+                            <p class="mt-2 inline-flex items-center gap-1.5 text-sm font-semibold text-saffron"><x-icon name="check" class="size-4" /> {{ $t('pricing.save') }}</p>
+                        </div>
+                    </div>
                 @endif
                 <ul class="mt-8 grid gap-3 sm:grid-cols-2">
                     @foreach (__('app.landing.pricing.includes') as $feature)
@@ -416,4 +440,44 @@
         </div>
         <p class="mt-6 text-center">{{ $t('footer.made') }}</p>
     </footer>
+
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/sw.js').catch(() => {});
+        }
+
+        (() => {
+            const buttons = document.querySelectorAll('[data-install]');
+            const hint = document.querySelector('[data-install-hint]');
+            const done = document.querySelector('[data-install-done]');
+            let deferredPrompt = null;
+
+            const markInstalled = () => {
+                buttons.forEach((button) => { button.hidden = true; });
+                hint.hidden = true;
+                done.hidden = false;
+            };
+
+            if (matchMedia('(display-mode: standalone)').matches || navigator.standalone) {
+                markInstalled();
+                return;
+            }
+
+            window.addEventListener('beforeinstallprompt', (event) => {
+                event.preventDefault();
+                deferredPrompt = event;
+            });
+            window.addEventListener('appinstalled', markInstalled);
+
+            buttons.forEach((button) => button.addEventListener('click', async () => {
+                if (deferredPrompt) {
+                    deferredPrompt.prompt();
+                    await deferredPrompt.userChoice;
+                    deferredPrompt = null;
+                } else {
+                    hint.hidden = false;
+                }
+            }));
+        })();
+    </script>
 </x-layouts.base>
