@@ -45,6 +45,7 @@ return [
         ],
         'renew_title' => 'Yenile',
         'month' => 'ay',
+        'yearly' => 'Ya da bir yıllık :price öde — iki ay bedava.',
         'renew_text' => 'Ödeme doğrudan Sofra ekibiyle ayarlanır. Ödeme alınır alınmaz aboneliğiniz hemen uzatılır.',
         'contact' => 'Yenilemek için bize ulaşın',
         'no_contact' => 'Aboneliğinizi yenilemek için Sofra ekibiyle iletişime geçin.',

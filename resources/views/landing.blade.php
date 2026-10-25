@@ -339,6 +339,9 @@
                     <span class="pb-2 text-paper/80">{{ $t('pricing.period', ['period' => $period]) }}</span>
                 </div>
                 <p class="mt-2 text-paper/75">{{ $monthlyPrice ? $t('pricing.then', ['price' => $monthlyPrice]) : $t('pricing.then_generic') }}</p>
+                @if ($monthlyPrice && $yearlyPrice)
+                    <p class="mt-3 inline-flex rounded-full bg-paper/15 px-4 py-1.5 text-sm font-semibold text-saffron">{{ $t('pricing.yearly', ['price' => $yearlyPrice]) }}</p>
+                @endif
                 <ul class="mt-8 grid gap-3 sm:grid-cols-2">
                     @foreach (__('app.landing.pricing.includes') as $feature)
                         <li class="flex items-center gap-3"><span class="grid size-6 place-items-center rounded-full bg-paper/15"><x-icon name="check" class="size-3.5" /></span> {{ $feature }}</li>

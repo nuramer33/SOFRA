@@ -45,6 +45,7 @@ return [
         ],
         'renew_title' => 'Renew',
         'month' => 'month',
+        'yearly' => 'Or pay :price for a full year — two months free.',
         'renew_text' => 'Payment is arranged directly with the Sofra team. Once received, your subscription is extended right away.',
         'contact' => 'Contact us to renew',
         'no_contact' => 'Contact the Sofra team to renew your subscription.',

@@ -29,6 +29,7 @@ class BillingController extends Controller
             'graceEndsAt' => $shop->paymentDueAt()?->copy()->addDays(config('sofra.billing.grace_days')),
             'expiredMode' => Shop::expiredMenuMode(),
             'price' => config('sofra.billing.monthly_price'),
+            'yearlyPrice' => config('sofra.billing.yearly_price'),
             'contact' => $this->contactLink($shop),
         ]);
     }

@@ -531,6 +531,7 @@ return [
             'period' => 'for :period',
             'then' => 'Then :price a month after the free period.',
             'then_generic' => 'Then a simple monthly subscription after the free period.',
+            'yearly' => 'Yearly offer: :price a year — two months free',
             'includes' => [
                 'Unlimited products and categories',
                 'Arabic, Turkish and English',

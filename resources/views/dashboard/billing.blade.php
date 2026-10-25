@@ -35,6 +35,9 @@
         <section class="reveal card flex flex-col p-6" style="--i: 2">
             <h2 class="font-display text-xl font-semibold">{{ __('billing.page.renew_title') }}</h2>
             <p class="mt-3 font-display text-4xl font-semibold" dir="ltr">{{ $price }}<span class="text-base font-normal text-ink-mute"> / {{ __('billing.page.month') }}</span></p>
+            @if ($yearlyPrice)
+                <p class="mt-2 text-sm font-semibold text-olive">{{ __('billing.page.yearly', ['price' => $yearlyPrice]) }}</p>
+            @endif
 
             @if ($stripeEnabled)
                 @if ($checkout === 'success')

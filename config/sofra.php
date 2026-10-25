@@ -86,6 +86,7 @@ return [
             'api_version' => env('STRIPE_API_VERSION', '2024-06-20'),
         ],
         'monthly_price' => env('SOFRA_MONTHLY_PRICE', '$5'), // shown on the landing page
+        'yearly_price' => env('SOFRA_YEARLY_PRICE', '$50'), // yearly offer, shown next to the monthly price
         'support_whatsapp' => env('SOFRA_SUPPORT_WHATSAPP'), // digits, e.g. 905551234567
         'support_email' => env('SOFRA_SUPPORT_EMAIL'),
         'support_instagram' => env('SOFRA_SUPPORT_INSTAGRAM', 'norha_ndesign'), // handle without the @

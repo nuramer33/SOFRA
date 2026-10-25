@@ -531,6 +531,7 @@ return [
             'period' => ':period boyunca',
             'then' => 'Ücretsiz dönemden sonra aylık :price.',
             'then_generic' => 'Ücretsiz dönemden sonra uygun bir aylık abonelik.',
+            'yearly' => 'Yıllık fırsat: yılda :price — iki ay bedava',
             'includes' => [
                 'Sınırsız ürün ve kategori',
                 'Arapça, Türkçe ve İngilizce',
