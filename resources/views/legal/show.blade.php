@@ -1,6 +1,6 @@
 @php
     $content = __("legal.{$page}");
-    $price = config('sofra.billing.monthly_price') ?: '$12';
+    $price = config('sofra.billing.monthly_price') ?: '$5';
     $whatsapp = config('sofra.billing.support_whatsapp');
     $email = config('sofra.billing.support_email');
 @endphp
