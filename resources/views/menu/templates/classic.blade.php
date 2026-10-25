@@ -267,7 +267,7 @@
             </button>
             <a href="{{ route('home') }}" class="inline-flex items-center gap-2 rounded-full px-3 py-1.5 transition hover:text-ink">
                 {{ __('app.menu.powered_by') }}
-                <x-logo class="[&_span]:text-base [&_svg]:size-5" />
+                <x-logo class="[&_span]:text-base [&_.logo-mark]:size-6" />
             </a>
         </footer>
 

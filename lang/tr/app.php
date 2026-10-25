@@ -484,7 +484,7 @@ return [
             'toast' => 'WhatsApp\'ta yeni sipariş',
         ],
         'kinds_label' => 'Sofra kimler için',
-        'kinds' => ['Kafeler', 'Restoranlar', 'Tatlıcılar', 'Fırınlar', 'Meyve suyu', 'Parfüm', 'Aksesuar', 'Instagram mağazaları'],
+        'kinds' => ['Kafeler', 'Restoranlar', 'Tatlıcılar', 'Fırınlar', 'Meyve suyu', 'Instagram mağazaları'],
         'how' => [
             'eyebrow' => 'Üç adım',
             'title' => 'Kayıttan ilk siparişe dakikalar içinde',

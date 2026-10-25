@@ -484,7 +484,7 @@ return [
             'toast' => 'New order on WhatsApp',
         ],
         'kinds_label' => 'Who Sofra is for',
-        'kinds' => ['Cafés', 'Restaurants', 'Sweet shops', 'Bakeries', 'Juice bars', 'Perfume', 'Accessories', 'Instagram shops'],
+        'kinds' => ['Cafés', 'Restaurants', 'Sweet shops', 'Bakeries', 'Juice bars', 'Instagram shops'],
         'how' => [
             'eyebrow' => 'Three steps',
             'title' => 'From sign-up to first order in minutes',

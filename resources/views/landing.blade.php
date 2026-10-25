@@ -383,6 +383,7 @@
                     <div class="arch drift absolute -bottom-28 start-[10%] h-72 w-48 border border-paper/10"></div>
                     <div class="arch drift absolute -bottom-36 end-[12%] h-80 w-56 bg-clay/30 [animation-delay:-6s]"></div>
                 </div>
+                <span class="logo-mark relative mx-auto mb-8 block size-28 bg-paper sm:size-36" style="--mark: url('{{ asset('icons/mark-thin.png') }}')" aria-hidden="true"></span>
                 <h2 class="relative font-display text-4xl font-semibold text-balance sm:text-6xl">{{ $t('final.title') }}</h2>
                 <p class="relative mt-4 text-lg text-paper/75">{{ $t('final.text', ['period' => $period]) }}</p>
                 <a href="{{ $start }}" class="btn btn-primary relative mt-9 px-8 py-4 text-lg">{{ auth()->check() ? $startLabel : $t('final.cta') }}</a>
