@@ -561,7 +561,6 @@ return [
             'title' => 'Sık sorulanlar',
             'items' => [
                 ['q' => 'Müşterilerimin uygulama indirmesi gerekir mi?', 'a' => 'Hayır. Menü telefon kamerasıyla ya da linkten doğrudan tarayıcıda açılır.'],
-                ['q' => 'Ücretsiz dönemden sonra ne olur?', 'a' => 'Bitmeden önce sizinle iletişime geçeriz; aylık abonelik üçüncü aydan itibaren başlar. Otomatik ödeme alınmaz, menünüz aniden kapanmaz.'],
                 ['q' => 'Siparişlerden komisyon alıyor musunuz?', 'a' => 'Asla. Sipariş sizinle müşteriniz arasında, WhatsApp\'ta.'],
                 ['q' => 'Fiyatları istediğim zaman değiştirebilir miyim?', 'a' => 'Evet, değişiklikler anında görünür — QR\'ı yeniden basmanıza gerek yok.'],
                 ['q' => 'Instagram mağazam için uygun mu?', 'a' => 'Kesinlikle. Linki biyografinize koyun, adresli teslimat siparişleri alın.'],

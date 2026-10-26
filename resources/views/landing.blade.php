@@ -23,13 +23,7 @@
         'url' => route('home'),
         'inLanguage' => \App\Support\Locales::codes(),
     ];
-    if ($monthlyPrice && preg_match('/\d+(?:[.,]\d+)?/', $monthlyPrice, $amount)) {
-        $jsonLd['offers'] = [
-            '@type' => 'Offer',
-            'price' => str_replace(',', '.', $amount[0]),
-            'priceCurrency' => str_contains($monthlyPrice, '₺') ? 'TRY' : (str_contains($monthlyPrice, '€') ? 'EUR' : 'USD'),
-        ];
-    }
+    $jsonLd['offers'] = ['@type' => 'Offer', 'price' => '0', 'priceCurrency' => 'USD'];
 @endphp
 <x-layouts.base :exact-title="__('app.brand').' — '.__('app.tagline')" :scripts="['resources/js/landing.js']" body-class="grain landing-olive overflow-x-clip">
     <x-slot:head>
@@ -82,7 +76,7 @@
                     <p class="hero-in mx-auto mt-6 max-w-xl text-lg leading-relaxed text-ink-soft lg:mx-0" style="--i: 5">{{ $t('hero.subtitle') }}</p>
                     <div class="hero-in mt-9 flex flex-col items-center gap-3 sm:flex-row sm:justify-center lg:justify-start" style="--i: 6">
                         <a href="{{ $start }}" class="btn btn-primary btn-shine group px-7 py-4 text-lg">
-                            {{ auth()->check() ? $startLabel : $t('hero.cta', ['period' => $period]) }}
+                            {{ $startLabel }}
                             <x-icon name="arrow" class="flip-rtl size-4 transition-transform duration-300 group-hover:translate-x-1 rtl:group-hover:-translate-x-1" />
                         </a>
                         @if ($demoUrl)
@@ -349,23 +343,7 @@
                 <h2 class="mt-3 max-w-lg font-display text-4xl font-semibold text-balance sm:text-5xl">{{ $t('pricing.title') }}</h2>
                 <div class="mt-8 flex flex-wrap items-end gap-x-4 gap-y-2">
                     <span class="font-display text-6xl font-semibold">{{ $t('pricing.free') }}</span>
-                    <span class="pb-2 text-paper/80">{{ $t('pricing.period', ['period' => $period]) }}</span>
                 </div>
-                <p class="mt-2 text-paper/75">{{ $monthlyPrice ? $t('pricing.then', ['price' => $monthlyPrice]) : $t('pricing.then_generic') }}</p>
-                @if ($monthlyPrice && $yearlyPrice)
-                    <div class="mt-7 grid gap-4 sm:grid-cols-2">
-                        <div class="rounded-3xl border border-paper/15 bg-paper/5 p-5">
-                            <p class="text-sm font-semibold text-paper/70">{{ $t('pricing.plan_month') }}</p>
-                            <p class="mt-2 font-display text-4xl font-semibold" dir="ltr">{{ $monthlyPrice }} <span class="text-sm font-normal text-paper/60">{{ $t('pricing.per_month') }}</span></p>
-                        </div>
-                        <div class="relative rounded-3xl border-2 border-saffron bg-saffron/15 p-5 shadow-[0_0_40px_-8px_var(--color-saffron)]">
-                            <span class="absolute -top-3 start-5 inline-flex items-center gap-1.5 rounded-full bg-saffron px-3 py-1 text-xs font-bold text-ink"><x-icon name="sparkle" class="size-3" /> {{ $t('pricing.best') }}</span>
-                            <p class="text-sm font-semibold text-saffron">{{ $t('pricing.plan_year') }}</p>
-                            <p class="mt-2 font-display text-4xl font-semibold" dir="ltr">{{ $yearlyPrice }} <span class="text-sm font-normal text-paper/70">{{ $t('pricing.per_year') }}</span></p>
-                            <p class="mt-2 inline-flex items-center gap-1.5 text-sm font-semibold text-saffron"><x-icon name="check" class="size-4" /> {{ $t('pricing.save') }}</p>
-                        </div>
-                    </div>
-                @endif
                 <ul class="mt-8 grid gap-3 sm:grid-cols-2">
                     @foreach (__('app.landing.pricing.includes') as $feature)
                         <li class="flex items-center gap-3"><span class="grid size-6 place-items-center rounded-full bg-paper/15"><x-icon name="check" class="size-3.5" /></span> {{ $feature }}</li>

@@ -28,12 +28,12 @@ class HomeControllerTest extends TestCase
         $this->get('/')->assertSee(route('menu.show', 'demo'));
     }
 
-    public function test_shows_the_monthly_price_when_configured(): void
+    public function test_landing_page_does_not_show_prices_while_the_service_is_free(): void
     {
-        config(['sofra.billing.monthly_price' => '$9']);
+        config(['sofra.billing.monthly_price' => '$9', 'sofra.billing.yearly_price' => '$90']);
 
         $this->get('/locale/en');
-        $this->get('/')->assertSee('Then $9 a month');
+        $this->get('/')->assertDontSee('$9')->assertDontSee('$90');
     }
 
     public function test_logged_in_owner_is_sent_to_the_dashboard_not_sign_up(): void

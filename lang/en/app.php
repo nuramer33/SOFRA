@@ -561,7 +561,6 @@ return [
             'title' => 'Questions',
             'items' => [
                 ['q' => 'Do my customers need to download an app?', 'a' => 'No. The menu opens from the phone camera or the link, right in the browser.'],
-                ['q' => 'What happens after the free period?', 'a' => 'We’ll contact you before it ends; the monthly subscription starts from the third month. Nothing is charged automatically and your menu never switches off by surprise.'],
                 ['q' => 'Do you take a commission on orders?', 'a' => 'Never. The order is between you and your customer, on WhatsApp.'],
                 ['q' => 'Can I change prices anytime?', 'a' => 'Yes, and changes show instantly — no need to reprint your QR.'],
                 ['q' => 'Does it work for my Instagram shop?', 'a' => 'Absolutely. Put the link in your bio and receive delivery orders with the address.'],

@@ -38,15 +38,13 @@ class SeoTest extends TestCase
 
     public function test_landing_page_has_canonical_social_preview_and_structured_data(): void
     {
-        config(['sofra.billing.monthly_price' => '$12']);
-
         $response = $this->withHeader('Accept-Language', 'en')->get('/')->assertOk();
 
         $response->assertSee('<link rel="canonical" href="'.route('home').'">', false)
             ->assertSee('<meta property="og:image" content="'.asset('og-default.png').'">', false)
             ->assertSee('<meta name="twitter:card" content="summary_large_image">', false)
             ->assertSee('"@type":"SoftwareApplication"', false)
-            ->assertSee('"price":"12"', false)
+            ->assertSee('"price":"0"', false)
             ->assertSee('"priceCurrency":"USD"', false);
     }
 
