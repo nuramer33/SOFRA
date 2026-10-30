@@ -48,8 +48,6 @@
         <div x-show="tab === 'store'" data-tab="store" role="tabpanel" class="space-y-4 lg:space-y-6">
         {{-- Identity ------------------------------------------------------- --}}
         <x-settings-section :title="__('app.settings.section_identity')" :text="__('app.settings.section_identity_text')" :i="1">
-            <x-locale-tabs :locales="$locales" :fields="['name', 'tagline']" />
-
             <x-translatable-field name="name" :label="__('app.fields.shop_name')" :locales="$locales"
                                   :values="$shop->getTranslations('name')" :required="$shop->default_locale" maxlength="80" />
             <x-translatable-field name="tagline" :label="__('app.fields.tagline')" :locales="$locales"
@@ -112,8 +110,6 @@
 
         {{-- Location & contact ---------------------------------------------- --}}
         <x-settings-section :title="__('shopinfo.settings.section_contact')" :text="__('shopinfo.settings.section_contact_text')" :i="2">
-            <x-locale-tabs :locales="$locales" :fields="['address', 'hours']" />
-
             <x-translatable-field name="address" :label="__('shopinfo.settings.address')" :locales="$locales"
                                   :values="$shop->getTranslations('address')" maxlength="200"
                                   :placeholder="__('shopinfo.settings.address_placeholder')" />

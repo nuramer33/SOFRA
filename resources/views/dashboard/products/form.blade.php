@@ -25,9 +25,6 @@
             <section class="card space-y-6 p-5 sm:p-7">
                 <div class="flex flex-wrap items-center justify-between gap-3">
                     <h2 class="{{ $sectionTitle }} !mb-0">{{ __('app.products.section_details') }}</h2>
-                    @if (count($locales) > 1)
-                        <x-locale-tabs :locales="$locales" :fields="['name', 'description']" class="!justify-end [&>span]:hidden sm:[&>span]:inline" />
-                    @endif
                 </div>
 
                 <x-translatable-field name="name" :label="__('app.fields.name')" :locales="$locales"

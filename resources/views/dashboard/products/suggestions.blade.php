@@ -63,10 +63,6 @@
 
             <p class="rounded-2xl bg-olive-soft/60 p-4 text-sm text-ink-soft ring-1 ring-olive/20">{{ __('suggestions.intro') }}</p>
 
-            @if (count($locales) > 1)
-                <x-locale-tabs :locales="$locales" :fields="[]" class="card p-4" />
-            @endif
-
             <template x-for="(row, index) in rows" :key="index">
                 <section class="card space-y-5 p-5 sm:p-7">
                     <div class="flex items-center justify-between gap-3">
@@ -90,7 +86,7 @@
                     </label>
 
                     @foreach ($locales as $locale)
-                        <div x-show="lang === @js($locale)" @if (! $loop->first) x-cloak @endif class="space-y-4">
+                        <div class="space-y-4">
                             <label class="block space-y-1.5">
                                 <span class="flex items-center gap-2 text-sm font-medium text-ink-soft">
                                     {{ __('suggestions.fields.title') }}

@@ -15,10 +15,6 @@
         @if ($editing) @method('PUT') @endif
 
         <section class="card space-y-6 p-5 sm:p-7">
-            @if (count($locales) > 1)
-                <x-locale-tabs :locales="$locales" :fields="['name']" />
-            @endif
-
             <x-translatable-field name="name" :label="__('app.fields.name')" :locales="$locales"
                                   :values="$category->getTranslations('name')" :required="$shop->default_locale"
                                   maxlength="60" :placeholder="__('app.categories.name_placeholder')" />

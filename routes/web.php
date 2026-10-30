@@ -36,6 +36,15 @@ use App\Http\Controllers\StripeWebhookController;
 use App\Http\Controllers\TrackController;
 use App\Support\Locales;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Storage;
+
+// Uploaded images. Hosts that don't have the public/storage symlink (it is not
+// committed) fall through to here, so logos and photos still show.
+Route::get('storage/{path}', function (string $path) {
+    abort_unless(Storage::disk('public')->exists($path), 404);
+
+    return Storage::disk('public')->response($path, null, ['Cache-Control' => 'public, max-age=31536000']);
+})->where('path', '.*');
 
 // Marketing site.
 Route::get('/', HomeController::class)->name('home');

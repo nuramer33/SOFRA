@@ -14,7 +14,7 @@
             $error = $errors->first($key);
             $value = old("{$name}.{$locale}", $values[$locale] ?? '');
         @endphp
-        <div x-show="lang === @js($locale)" @if (! $loop->first) x-cloak @endif class="space-y-2">
+        <div class="space-y-2">
             <label for="{{ $id }}" class="flex items-center gap-2 text-sm font-medium text-ink-soft">
                 {{ $label }}
                 <span class="rounded-full bg-sand px-2 py-0.5 text-[11px] font-normal" lang="{{ $locale }}">{{ \App\Support\Locales::name($locale) }}</span>
