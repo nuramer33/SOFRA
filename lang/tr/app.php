@@ -569,7 +569,7 @@ return [
         ],
         'final' => [
             'title' => 'İşletmeniz daha güzel bir menüyü hak ediyor.',
-            'text' => 'Bugün başlayın, ilk :period bizden.',
+            'text' => 'Bugün ücretsiz başlayın.',
             'cta' => 'Menünüzü oluşturun',
         ],
         'footer' => [

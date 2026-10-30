@@ -10,8 +10,6 @@
         'radial-gradient(circle at 40% 40%, #fbe6bd 0 14%, #d9a85b 40%, #efe5d5 43% 60%, #e1d2b9 62%)',
     ];
     $kinds = __('app.landing.kinds');
-    // "two months" / "شهرين" / "2 ay" — proper grammar per language.
-    $period = trans_choice('app.landing.months', $trialMonths, ['count' => $trialMonths]);
     // Structured data: tells Google what Sofra is (and its price, when set).
     $jsonLd = [
         '@context' => 'https://schema.org',
@@ -390,7 +388,7 @@
                 </div>
                 <span class="logo-mark relative mx-auto mb-8 block size-28 bg-paper sm:size-36" style="--mark: url('{{ asset('icons/mark-thin.png') }}')" aria-hidden="true"></span>
                 <h2 class="relative font-display text-4xl font-semibold text-balance sm:text-6xl">{{ $t('final.title') }}</h2>
-                <p class="relative mt-4 text-lg text-paper/75">{{ $t('final.text', ['period' => $period]) }}</p>
+                <p class="relative mt-4 text-lg text-paper/75">{{ $t('final.text') }}</p>
                 <a href="{{ $start }}" class="btn btn-primary relative mt-9 px-8 py-4 text-lg">{{ auth()->check() ? $startLabel : $t('final.cta') }}</a>
             </div>
         </section>

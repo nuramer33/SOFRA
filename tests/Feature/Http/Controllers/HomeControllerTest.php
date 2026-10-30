@@ -10,12 +10,12 @@ class HomeControllerTest extends TestCase
 {
     use LazilyRefreshDatabase;
 
-    public function test_renders_the_landing_page_in_arabic_with_the_trial_offer(): void
+    public function test_renders_the_landing_page_in_arabic_without_a_trial_offer(): void
     {
         $this->get('/')
             ->assertOk()
             ->assertSee('<html lang="ar" dir="rtl">', false)
-            ->assertSee('شهرين')                         // "two months", grammatically
+            ->assertDontSee('شهرين')
             ->assertSee(route('register'));
     }
 

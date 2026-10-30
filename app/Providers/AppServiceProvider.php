@@ -83,7 +83,7 @@ class AppServiceProvider extends ServiceProvider
         Model::shouldBeStrict(! $this->app->isProduction());
 
         Password::defaults(fn () => $this->app->isProduction()
-            ? Password::min(8)->letters()->numbers()->uncompromised()
+            ? Password::min(8)->letters()->numbers()
             : Password::min(8));
 
         // A product written only in Arabic still shows its Arabic name on the

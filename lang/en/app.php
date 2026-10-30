@@ -569,7 +569,7 @@ return [
         ],
         'final' => [
             'title' => 'Your shop deserves a better menu.',
-            'text' => 'Start today — the first :period are on us.',
+            'text' => 'Start today — it’s free.',
             'cta' => 'Create your menu',
         ],
         'footer' => [

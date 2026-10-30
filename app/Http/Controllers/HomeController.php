@@ -19,7 +19,6 @@ class HomeController extends Controller
         return view('landing', [
             'demoUrl' => $demo?->menuUrl(),
             'qr' => new MenuQrCode($demo, $demo?->menuUrl() ?? route('home')),
-            'trialMonths' => max(1, (int) round(config('sofra.billing.trial_days') / 30)),
             'monthlyPrice' => config('sofra.billing.monthly_price'),
             'yearlyPrice' => config('sofra.billing.yearly_price'),
         ]);
