@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Concerns;
 
+use App\Support\AutoTranslator;
 use App\Support\Locales;
 
 /**
@@ -59,10 +60,12 @@ trait ValidatesTranslations
     {
         $values = (array) $this->validated($field, []);
 
-        return collect($locales)
+        $texts = collect($locales)
             ->mapWithKeys(fn (string $locale) => [$locale => trim((string) ($values[$locale] ?? ''))])
             ->filter(fn (string $value) => $value !== '')
             ->all();
+
+        return app(AutoTranslator::class)->fill($texts, $locales);
     }
 
     /**

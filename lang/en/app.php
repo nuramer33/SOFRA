@@ -142,7 +142,7 @@ return [
     'forms' => [
         'content_language' => 'Content language',
         'required' => 'Required',
-        'fallback_note' => 'Other languages are optional; if left empty, the text shows in :language.',
+        'auto_translate_note' => 'Write it once in your main language; it is translated automatically into your other languages.',
         'has_errors' => 'This language has an error',
     ],
 

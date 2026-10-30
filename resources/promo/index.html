@@ -1,0 +1,675 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Sofra — Promo film</title>
+<meta name="viewport" content="width=1920">
+<style>
+@font-face{font-family:Fraunces;font-weight:100 900;font-style:normal;src:url(fonts/fraunces-latin-wght-normal.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+2000-206F,U+20AC,U+2122,U+2212}
+@font-face{font-family:Fraunces;font-weight:100 900;font-style:normal;src:url(fonts/fraunces-latin-ext-wght-normal.woff2) format('woff2');unicode-range:U+0100-02BA,U+1E00-1EFF,U+20A0-20C0}
+@font-face{font-family:Fraunces;font-weight:100 900;font-style:italic;src:url(fonts/fraunces-latin-wght-italic.woff2) format('woff2')}
+@font-face{font-family:Readex;font-weight:160 700;src:url(fonts/readex-pro-latin-wght-normal.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+2000-206F,U+20AC,U+2122,U+2212}
+@font-face{font-family:Readex;font-weight:160 700;src:url(fonts/readex-pro-latin-ext-wght-normal.woff2) format('woff2');unicode-range:U+0100-02BA,U+1E00-1EFF,U+20A0-20C0}
+@font-face{font-family:Readex;font-weight:160 700;src:url(fonts/readex-pro-arabic-wght-normal.woff2) format('woff2');unicode-range:U+0600-06FF,U+0750-077F,U+FB50-FDFF,U+FE70-FEFC,U+200C-200E}
+
+:root{
+  --paper:#f4f2e7;--sand:#e9e8d3;--line:#d2d1b4;--ink:#1f2417;--ink-soft:#4d5340;--ink-mute:#656b56;
+  --clay:#55642f;--olive:#7d8c4b;--saffron:#d8a93f;
+  --brand:#55642f;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:#111;overflow:hidden;width:100%;height:100%}
+#stage{position:absolute;left:0;top:0;width:1920px;height:1080px;background:var(--paper);overflow:hidden;transform-origin:0 0;font-family:Readex,system-ui,sans-serif;color:var(--ink)}
+.abs{position:absolute}
+.disp{font-family:Fraunces,Georgia,serif}
+
+/* backdrop */
+.mk{display:inline-block;aspect-ratio:1;background:currentColor;-webkit-mask:url(assets/mark.png) center/contain no-repeat;mask:url(assets/mark.png) center/contain no-repeat;color:#55642f;flex:none}
+.blob{position:absolute;border-radius:50%;filter:blur(110px);pointer-events:none}
+#grain{position:absolute;inset:0;pointer-events:none;opacity:.5;mix-blend-mode:multiply;
+  background-image:radial-gradient(rgba(31,36,23,.05) 1px,transparent 1.2px);background-size:7px 7px}
+
+/* persistent logo */
+#logo{left:140px;top:76px;display:flex;align-items:center;gap:14px}
+#logo .mk{width:58px;height:58px}
+.ctalogo .mk{width:104px;height:104px}
+.lg .mk{width:34px;height:34px;color:var(--paper)}
+.chdr .av .mk{width:30px;height:30px;color:var(--paper)}
+.qrcard .shop .mk{width:40px;height:40px}
+#logo span{font:600 38px/1 Fraunces,serif}
+
+/* captions */
+.capwrap{position:absolute;left:140px;top:0;width:820px;height:1080px;display:flex;align-items:center;pointer-events:none}
+.cap{width:100%}
+.eyebrow{font:500 22px/1 Readex;letter-spacing:.2em;text-transform:uppercase;color:var(--clay);margin-bottom:34px;display:flex;align-items:center;gap:16px}
+.eyebrow::before{content:"";width:44px;height:2px;background:var(--saffron)}
+.h{font:500 84px/1.06 Fraunces,serif;letter-spacing:-.015em;color:var(--ink)}
+.h.big{font-size:94px;line-height:1.06}
+.h .line{display:block;white-space:nowrap}
+.w{display:inline-block;overflow:hidden;vertical-align:top;padding:0 .06em .16em 0;margin-bottom:-.16em}
+.w .wi{display:inline-block;will-change:transform}
+.w.it .wi{font-style:italic;color:var(--clay)}
+.strike .wi{position:relative;font-style:italic}
+.strike .wi::after{content:"";position:absolute;left:-2%;right:-2%;top:56%;height:4px;background:var(--clay);transform-origin:0 50%;transform:scaleX(var(--k,0));border-radius:2px}
+.sub{font:300 32px/1.45 Readex;color:var(--ink-soft);margin-top:34px;max-width:680px;text-wrap:balance}
+.langs span{display:inline-block}
+
+/* phones */
+.phone{position:absolute;width:440px;height:900px;border-radius:66px;background:var(--ink);padding:12px;
+  box-shadow:0 70px 120px -50px rgba(31,36,23,.55),0 24px 50px -30px rgba(31,36,23,.4),inset 0 0 0 2px rgba(255,255,255,.07)}
+.screen{position:relative;width:416px;height:876px;border-radius:54px;background:var(--paper);overflow:hidden}
+.island{position:absolute;left:50%;top:14px;width:112px;height:32px;margin-left:-56px;border-radius:20px;background:var(--ink);z-index:30}
+.content{position:absolute;inset:0}
+.hdr{position:absolute;left:22px;right:22px;top:62px;height:56px;display:flex;align-items:center;gap:14px}
+.lg{position:relative;width:52px;height:52px;border-radius:50%;background:var(--brand);flex:none;display:grid;place-items:center;color:var(--paper)}
+.lg .mk{width:28px;height:28px}
+.lg .mono{position:absolute;font:600 28px/1 Fraunces,serif;opacity:0}
+.nm{position:relative;flex:1;height:34px}
+.nm b{position:absolute;left:0;top:0;white-space:nowrap;font:600 25px/34px Fraunces,serif}
+[dir=rtl] .nm b{left:auto;right:0}
+.nm b+b{opacity:0}
+.lp{font:500 15px/1 Readex;background:var(--sand);color:var(--ink-soft);padding:10px 13px;border-radius:20px;display:flex;gap:6px;align-items:center;flex:none}
+.tabs{position:absolute;left:22px;right:22px;top:136px;display:flex;gap:8px}
+.tab{font:400 15px/1 Readex;padding:11px 17px;border-radius:20px;background:var(--sand);color:var(--ink-soft)}
+.tab.on{background:var(--ink);color:var(--paper)}
+.listwrap{position:absolute;left:0;right:0;top:196px;bottom:0;overflow:hidden}
+.list{position:absolute;left:16px;right:16px;top:0}
+.row{height:148px;margin-bottom:8px;border-radius:30px;background:rgba(255,255,255,.82);box-shadow:0 0 0 1px rgba(210,209,180,.7);padding:10px;display:flex;align-items:center;gap:16px;overflow:hidden;flex:none}
+.row.new{height:0;margin-bottom:0;padding-top:0;padding-bottom:0;opacity:0;box-shadow:none}
+.thumb{width:128px;height:128px;flex:none;border-radius:64px 64px 20px 20px;overflow:hidden;background:var(--sand)}
+.thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.info{flex:1;min-width:0}
+.info .n{font:500 19px/1.2 Readex;color:var(--ink)}
+.info .d{font:300 14px/1.35 Readex;color:var(--ink-mute);margin-top:5px}
+.info .pr{font:600 20px/1 Readex;color:var(--brand);margin-top:14px;direction:ltr;display:inline-block;position:relative;isolation:isolate}
+.pr .hl{position:absolute;inset:-6px -10px;border-radius:12px;background:#f2d98a;opacity:0;z-index:-1}
+.info .pr s{position:absolute;left:0;opacity:0;color:var(--ink-mute);font-weight:400;transform:translateY(-100%)}
+.badge{display:inline-block;font:600 11px/1 Readex;letter-spacing:.12em;text-transform:uppercase;background:var(--saffron);color:var(--ink);padding:5px 8px;border-radius:10px;margin-inline-start:8px;vertical-align:2px}
+.plus{position:relative;width:46px;height:46px;flex:none;border-radius:50%;background:var(--brand);color:var(--paper);display:grid;place-items:center;align-self:flex-end;margin-bottom:6px}
+.plus i{font:300 28px/1 Readex;font-style:normal;position:absolute;margin-top:-2px}
+.plus em{font:600 19px/1 Readex;font-style:normal;position:absolute;opacity:0}
+
+/* cart bar + sheet */
+.bar{position:absolute;left:16px;right:16px;bottom:22px;height:68px;border-radius:34px;background:var(--ink);color:var(--paper);display:flex;align-items:center;padding:0 10px;gap:14px;z-index:12}
+.bar .n{width:48px;height:48px;border-radius:50%;background:var(--brand);display:grid;place-items:center;font:600 20px/1 Readex}
+.bar .t{font:400 19px/1 Readex;flex:1}
+.bar .p{font:600 20px/1 Readex;padding-right:10px;direction:ltr}
+.dim{position:absolute;inset:0;background:rgba(31,36,23,.42);z-index:14}
+.sheet{position:absolute;left:0;right:0;bottom:0;height:590px;background:var(--paper);border-radius:40px 40px 0 0;z-index:16;padding:30px 26px 0}
+.sheet .grab{position:absolute;left:50%;top:12px;width:48px;height:5px;border-radius:3px;margin-left:-24px;background:rgba(31,36,23,.18)}
+.sheet h4{font:600 30px/1 Fraunces,serif;margin-top:10px}
+.ln2{display:flex;align-items:center;gap:14px;margin-top:20px}
+.ln2 .sm{width:62px;height:62px;border-radius:31px 31px 14px 14px;overflow:hidden}
+.ln2 .sm img{width:100%;height:100%;object-fit:cover}
+.ln2 .nn{flex:1;font:400 18px/1.25 Readex}
+.ln2 .pp{font:600 18px/1 Readex;direction:ltr}
+.hr{height:1px;background:var(--line);margin:22px 0 18px}
+.tot{display:flex;justify-content:space-between;font:600 22px/1 Readex}
+.seg{display:flex;gap:8px;margin-top:22px}
+.seg span{flex:1;text-align:center;padding:13px 0;border-radius:18px;background:var(--sand);font:400 15px/1 Readex;color:var(--ink-soft)}
+.seg span.on{background:var(--ink);color:var(--paper)}
+.field{margin-top:12px;height:52px;border-radius:16px;background:#fff;box-shadow:0 0 0 1px var(--line);display:flex;align-items:center;padding:0 16px;font:300 16px/1 Readex;color:var(--ink-soft);gap:8px}
+.field b{font-weight:500;color:var(--ink)}
+.send{position:absolute;left:22px;right:22px;bottom:26px;height:64px;border-radius:32px;background:var(--brand);color:var(--paper);display:grid;place-items:center;font:500 19px/1 Readex}
+.send span{position:absolute}
+
+/* chat phone */
+.chat{position:absolute;inset:0;background:#ece9d6;
+  background-image:radial-gradient(rgba(85,100,47,.10) 1.5px,transparent 1.6px);background-size:26px 26px}
+.chdr{position:absolute;left:0;right:0;top:0;height:128px;background:var(--paper);box-shadow:0 1px 0 var(--line);display:flex;align-items:flex-end;gap:12px;padding:0 20px 16px}
+.chdr .av{width:48px;height:48px;border-radius:50%;background:var(--clay);display:grid;place-items:center}
+.chdr .av .mk{width:26px;height:26px}
+.chdr .tt b{display:block;font:600 21px/1.1 Readex}
+.chdr .tt span{font:300 14px/1.4 Readex;color:var(--olive)}
+.bubble{position:absolute;left:18px;top:176px;width:340px;background:#fff;border-radius:6px 24px 24px 24px;padding:20px 22px 14px;box-shadow:0 2px 0 rgba(31,36,23,.06),0 18px 30px -22px rgba(31,36,23,.35);transform-origin:0 0}
+.bubble .bt{font:600 21px/1.2 Readex;display:flex;align-items:center;gap:10px}
+.bubble .bt i{font-style:normal;font:500 12px/1 Readex;letter-spacing:.1em;text-transform:uppercase;background:var(--clay-soft,#e3e8cb);color:var(--clay);padding:5px 8px;border-radius:8px}
+.bubble .ml{font:300 16px/1.3 Readex;color:var(--ink-soft);margin-top:6px}
+.bubble .li{display:flex;justify-content:space-between;font:400 18px/1 Readex;margin-top:14px}
+.bubble .li span:last-child{direction:ltr;font-weight:500}
+.bubble .tl{display:flex;justify-content:space-between;font:600 21px/1 Readex;margin-top:16px;padding-top:16px;border-top:1px dashed var(--line)}
+.bubble .tl span:last-child{direction:ltr;color:var(--clay)}
+.bubble .tm{text-align:end;font:300 12px/1 Readex;color:var(--ink-mute);margin-top:12px}
+.bubble .tm b{color:#4aa3c4;font-weight:400;letter-spacing:-2px;margin-left:4px}
+.composer{position:absolute;left:14px;right:14px;bottom:24px;height:52px;border-radius:26px;background:#fff;box-shadow:0 0 0 1px var(--line);display:flex;align-items:center;padding:0 20px;font:300 16px/1 Readex;color:var(--ink-mute)}
+.notif{position:absolute;left:14px;right:14px;top:56px;height:78px;border-radius:26px;background:var(--ink);color:var(--paper);z-index:20;display:flex;align-items:center;gap:14px;padding:0 16px;box-shadow:0 20px 40px -20px rgba(0,0,0,.5)}
+.notif .ic{width:44px;height:44px;border-radius:13px;background:var(--olive);display:grid;place-items:center;flex:none}
+.notif .ic svg{width:24px;height:24px}
+.notif b{display:block;font:500 17px/1.2 Readex}
+.notif span{font:300 14px/1.3 Readex;opacity:.7}
+
+/* taps */
+.tap{position:absolute;width:0;height:0;pointer-events:none;z-index:50}
+.tap .dot{position:absolute;left:-30px;top:-30px;width:60px;height:60px;border-radius:50%;background:rgba(31,36,23,.20);box-shadow:0 0 0 1.5px rgba(255,255,255,.55) inset}
+.tap .ring{position:absolute;left:-36px;top:-36px;width:72px;height:72px;border-radius:50%;border:2.5px solid var(--saffron)}
+
+/* share */
+.qrcard{position:absolute;left:970px;top:172px;width:420px;height:500px;border-radius:44px;background:#fff;box-shadow:0 60px 100px -50px rgba(31,36,23,.5),0 0 0 1px rgba(210,209,180,.8);padding:44px 44px 0}
+.qrcard img{width:332px;height:332px;display:block}
+.qrcard .cap2{margin-top:30px;font:500 17px/1 Readex;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-mute);text-align:center}
+.qrcard .shop{margin-top:16px;display:flex;align-items:center;gap:12px;justify-content:center;font:600 28px/1 Fraunces,serif}
+.qrcard .shop .mk{width:34px;height:34px}
+.link{position:absolute;left:880px;top:780px;width:600px;height:84px;border-radius:42px;background:var(--ink);color:var(--paper);display:flex;align-items:center;justify-content:center;gap:16px;font:500 30px/1 Readex;letter-spacing:.01em}
+.link svg{width:28px;height:28px}
+.link em{font-style:normal;opacity:.55}
+
+/* CTA */
+#cta{position:absolute;inset:0}
+#cta .center{position:absolute;left:0;right:0;top:0;height:1080px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+.ctalogo{display:flex;align-items:center;gap:16px;margin-bottom:46px}
+
+.ctalogo span{font:600 56px/1 Fraunces,serif}
+.ctah{font:500 118px/1.04 Fraunces,serif;letter-spacing:-.02em}
+.ctah .line{display:block;white-space:nowrap}
+.ctasub{font:italic 400 58px/1.1 Fraunces,serif;color:var(--clay);margin-top:36px}
+.url{margin-top:50px;height:112px;padding:0 64px;border-radius:56px;background:var(--ink);color:var(--paper);display:flex;align-items:center;font:500 58px/1 Readex;letter-spacing:.005em}
+.url span{opacity:.55;font-weight:300}
+.ctanote{margin-top:30px;font:300 27px/1 Readex;color:var(--ink-mute);letter-spacing:.02em}
+.flank{position:absolute;bottom:-40px;border-radius:999px 999px 28px 28px;overflow:hidden;box-shadow:0 40px 60px -40px rgba(31,36,23,.5)}
+.flank img{width:100%;height:100%;object-fit:cover;display:block}
+
+/* ===== Arabic edition: mirrored layout, Arabic type ===== */
+body.ar #stage, body.ar #stage *{letter-spacing:0!important}
+body.ar #stage{font-family:Readex,system-ui,sans-serif}
+body.ar .h,body.ar .ctah,body.ar .ctasub,body.ar .nm b,body.ar .sheet h4,body.ar .qrcard .shop{font-family:Readex,system-ui,sans-serif}
+body.ar #logo span{font-size:42px;font-weight:600}
+body.ar .ctalogo span{font-size:62px;font-weight:600}
+body.ar .h{font-weight:600;line-height:1.3;font-size:80px}
+body.ar .h.big{font-size:90px;line-height:1.3}
+body.ar .ctah{font-weight:600;line-height:1.28;font-size:104px}
+body.ar .ctasub{font-style:normal;font-weight:500;font-size:54px}
+body.ar .w.it .wi{font-style:normal}
+body.ar .strike .wi{font-style:normal}
+body.ar .sub{font-size:34px;line-height:1.6}
+body.ar .eyebrow{font-size:27px;text-transform:none;font-weight:500}
+body.ar .capwrap{left:auto;right:140px;direction:rtl;text-align:right}
+body.ar #logo{left:auto;right:140px;direction:ltr}
+body.ar #b1{left:-300px!important;right:auto}
+body.ar #b2{left:1500px!important}
+body.ar .qrcard .cap2{text-transform:none;font-size:22px}
+body.ar .info .n{font-size:20px}
+body.ar .info .d{font-size:15px}
+body.ar .bubble{left:auto;right:18px;border-radius:24px 6px 24px 24px;transform-origin:100% 0}
+body.ar .bubble .tm{text-align:end}
+body.ar .bar .p{padding-right:0;padding-left:10px}
+body.ar .strike .wi::after{transform-origin:100% 50%;top:66%}
+body.ar #cta .center{direction:rtl}
+body.ar .ctalogo{direction:ltr}
+body.ar .l2,body.ar .l3,body.ar .ltr{direction:ltr;unicode-bidi:isolate}
+body.ar .url{direction:ltr}
+
+/* ===== Reel edition (1080x1920) ===== */
+body.reel #stage{width:1080px;height:1920px}
+body.reel .capwrap{left:70px;width:940px;top:180px;height:480px;justify-content:center;text-align:center}
+body.reel .cap{text-align:center}
+body.reel .eyebrow{justify-content:center;font-size:26px;margin-bottom:22px}
+body.reel .eyebrow::before{display:none}
+body.reel .h{font-size:76px}
+body.reel.ar .h{font-size:76px;line-height:1.28}
+body.reel .h.big,body.reel.ar .h.big{font-size:88px}
+body.reel #c3 .h,body.reel.ar #c3 .h{font-size:62px;line-height:1.2}
+body.reel .sub,body.reel.ar .sub{font-size:31px;line-height:1.55;margin:22px auto 0;max-width:840px}
+body.reel #logo{left:0!important;right:auto!important;width:1080px;justify-content:center;top:112px}
+body.reel .ctalogo{margin-bottom:34px}
+body.reel #cta .center{height:1760px}
+body.reel .ctah,body.reel.ar .ctah{font-size:96px}
+body.reel .ctasub,body.reel.ar .ctasub{font-size:48px}
+body.reel .url{font-size:44px;height:96px;padding:0 44px;margin-top:44px}
+body.reel .ctanote{font-size:25px}
+body.reel #b1{left:520px!important;top:-300px!important}
+body.reel #b2{left:-300px!important;top:1300px!important}
+#sharewrap{position:absolute;left:0;top:0;transform-origin:0 0}
+/* text-free master: captions, wordmark, CTA copy and link are left blank for manual titling */
+body.notext #caps,body.notext #logo span,body.notext .ctalogo span{display:none}
+body.notext #caps,body.notext #ch,body.notext #cs,body.notext #cn,body.notext #cu,body.notext #link,body.notext .qrcard .cap2,body.notext .qrcard .shop{visibility:hidden}
+</style>
+</head>
+<body>
+<div id="stage">
+  <div class="blob" id="b1" style="width:760px;height:760px;background:rgba(216,169,63,.32);left:1380px;top:-260px"></div>
+  <div class="blob" id="b2" style="width:700px;height:700px;background:rgba(125,140,75,.30);left:-260px;top:620px"></div>
+  <div id="grain"></div>
+
+  <div id="logo" class="abs">
+    <span class="mk"></span>
+    <span class="keep">Sofra</span>
+  </div>
+
+  <div id="caps"></div>
+
+  <!-- hero arch (S1) -->
+  <div id="arch" class="abs" style="left:1050px;top:110px;width:640px;height:860px;--r:320px;--rb:36px;border-radius:var(--r) var(--r) var(--rb) var(--rb);overflow:hidden;box-shadow:0 70px 110px -60px rgba(31,36,23,.55);background:var(--sand)">
+    <img id="archimg" src="assets/latte.jpg" style="width:100%;height:100%;object-fit:cover;object-position:50% 52%;display:block">
+  </div>
+
+  <!-- camera world -->
+  <div id="cam" class="abs" style="left:0;top:0;width:1920px;height:1080px">
+    <div id="phone1" class="phone" style="left:960px;top:90px">
+      <div class="screen">
+        <div class="island"></div>
+        <div id="contents"></div>
+        <div class="bar" id="bar"><div class="n" id="barn">1</div><div class="t">View order</div><div class="p" id="barp">140 ₺</div></div>
+        <div class="dim" id="dim"></div>
+        <div class="sheet" id="sheet">
+          <div class="grab"></div>
+          <h4>Your order</h4>
+          <div class="ln2"><div class="sm"><img src="assets/baklava.jpg"></div><div class="nn">1× Pistachio baklava</div><div class="pp">140 ₺</div></div>
+          <div class="ln2"><div class="sm"><img src="assets/latte.jpg"></div><div class="nn">1× Latte</div><div class="pp">110 ₺</div></div>
+          <div class="hr"></div>
+          <div class="tot"><span>Total</span><span style="direction:ltr">250 ₺</span></div>
+          <div class="seg"><span class="on">Dine in</span><span>Pickup</span><span>Delivery</span></div>
+          <div class="field"><b>Table number</b> 4</div>
+          <div class="send" id="send"><span id="sendA">Send order on WhatsApp</span><span id="sendB" style="opacity:0">Preparing…</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div id="phone2" class="phone" style="left:2060px;top:90px">
+      <div class="screen">
+        <div class="island"></div>
+        <div class="chat">
+          <div class="chdr"><div class="av"><span class="mk"></span></div><div class="tt"><b>New order</b><span>online</span></div></div>
+          <div class="bubble" id="bubble">
+            <div class="bt" id="bl0">Dine in — Table 4</div>
+            <div class="ml" id="bl1">Order from the menu</div>
+            <div class="li" id="bl2"><span>1× Latte</span><span>110 ₺</span></div>
+            <div class="li" id="bl3"><span>1× Pistachio baklava</span><span>140 ₺</span></div>
+            <div class="tl" id="bl4"><span>Total</span><span>250 ₺</span></div>
+            <div class="tm" id="bl5">9:42 <b>✓✓</b></div>
+          </div>
+          <div class="composer">Message</div>
+        </div>
+        <div class="notif" id="notif">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="#f4f2e7" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20l1.3-4A8 8 0 1 1 8 18.7L4 20z"/></svg></div>
+          <div><b>New order on WhatsApp</b><span>1× Latte, 1× Pistachio baklava</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- share -->
+  <div id="qrcard" class="qrcard" style="left:970px;top:190px;opacity:0">
+    <img src="assets/qr.svg" alt="">
+    <div class="cap2">Scan to open the menu</div>
+    <div class="shop"><span class="mk"></span>Your menu</div>
+  </div>
+  <div id="link" class="link" style="left:880px;top:740px;opacity:0">
+    <svg viewBox="0 0 24 24" fill="none" stroke="#d8a93f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3A4 4 0 0 0 11 18.7l1-1"/></svg>
+    <span>sofra.wasmer.app<em>/your-shop</em></span>
+  </div>
+
+  <!-- CTA -->
+  <div id="cta" style="opacity:0">
+    <div class="flank" id="f1" style="left:70px;width:210px;height:520px"><img src="assets/tart.jpg"></div>
+    <div class="flank" id="f2" style="left:300px;width:150px;height:340px"><img src="assets/croissant.jpg"></div>
+    <div class="flank" id="f3" style="left:1470px;width:150px;height:340px"><img src="assets/juice.jpg"></div>
+    <div class="flank" id="f4" style="left:1640px;width:210px;height:520px"><img src="assets/cheesecake.jpg"></div>
+    <div class="center">
+      <div class="ctalogo" id="cl"><span class="mk"></span><span class="keep">Sofra</span></div>
+      <div class="ctah" id="ch"></div>
+      <div class="ctasub" id="cs">Start free for two months.</div>
+      <div class="url" id="cu"><span>https://</span>sofra.wasmer.app<span>/</span></div>
+      <div class="ctanote" id="cn">No credit card &nbsp;·&nbsp; No automatic charges</div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ======================================================================
+   Tiny deterministic timeline: every frame is a pure function of t.
+   ====================================================================== */
+const DUR = 41, FPS = 30;
+const QS = new URLSearchParams(location.search);
+const LANG = ['ar','tr'].includes(QS.get('lang')) ? QS.get('lang') : 'en';
+const AR = LANG === 'ar', TR = LANG === 'tr';
+const REEL = QS.get('fmt') === 'reel';
+const SW = REEL ? 1080 : 1920, SH = REEL ? 1920 : 1080;
+const K = 1.12, L1 = REEL ? 540 / K - 220 : (AR ? 520 : 960), T1 = REEL ? 690 / K : 90, PAN = 900;
+const PY = y => REEL ? T1 + (y - 90) : y;
+const CXB = REEL ? L1 + 220 : (AR ? 740 : 1180);
+if (REEL) document.body.classList.add('reel');
+if (QS.get('text') === 'off') document.body.classList.add('notext');
+const M = LANG;                 // main (hero) language of the menu
+const MX = x => AR ? 1920 - x : x;          // mirror a stage x coordinate
+if (AR) { document.documentElement.lang = 'ar'; document.documentElement.dir = 'ltr'; document.body.classList.add('ar'); }
+const clamp=(v,a=0,b=1)=>Math.min(b,Math.max(a,v));
+const EASE={
+  lin:t=>t,
+  out:t=>1-Math.pow(1-t,4),          // quart out: default arrival
+  expo:t=>t>=1?1:1-Math.pow(2,-10*t), // expo out: long soft settle
+  inout:t=>t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2,
+  in:t=>t*t*t,
+  back:t=>{const c=1.5,c3=c+1;return 1+c3*Math.pow(t-1,3)+c*Math.pow(t-1,2)}, // small overshoot
+};
+const tracks=new Map(); const steps=[];
+const $=(s,r=document)=>[...r.querySelectorAll(s)];
+function els(x){return typeof x==='string'?$(x):Array.isArray(x)?x:[x]}
+function T(target,props,t0,d,ease='out',stagger=0){
+  els(target).forEach((el,i)=>{
+    let m=tracks.get(el); if(!m){m={};tracks.set(el,m)}
+    for(const k in props){
+      const [from,to]=Array.isArray(props[k])?props[k]:[props[k],props[k]];
+      (m[k]=m[k]||[]).push({from,to,t0:t0+i*stagger,d,e:EASE[ease]});
+      m[k].sort((a,b)=>a.t0-b.t0);
+    }
+  });
+}
+const S=fn=>steps.push(fn);
+const hex=h=>[1,3,5].map(i=>parseInt(h.slice(i,i+2),16));
+const mix=(a,b,p)=>typeof a==='string'?'#'+hex(a).map((v,i)=>Math.round(v+(hex(b)[i]-v)*p).toString(16).padStart(2,'0')).join(''):a+(b-a)*p;
+function valueAt(arr,t){
+  let v=arr[0].from;
+  for(const tr of arr){ if(t>=tr.t0){const p=clamp((t-tr.t0)/tr.d);v=mix(tr.from,tr.to,tr.e(p))} else break }
+  return v;
+}
+function render(t){
+  tracks.forEach((m,el)=>{
+    const g=k=>m[k]?valueAt(m[k],t):undefined; const st=el.style;
+    const x=g('x'),y=g('y'),s=g('s'),r=g('r');
+    if(x!==undefined||y!==undefined||s!==undefined||r!==undefined)
+      st.transform=`translate(${x||0}px,${y||0}px) scale(${s===undefined?1:s}) rotate(${r||0}deg)`;
+    const o=g('o'); if(o!==undefined) st.opacity=o;
+    const b=g('blur'); if(b!==undefined) st.filter=b>0.01?`blur(${b}px)`:'none';
+    for(const k of ['w','h','l','t']) {const v=g(k); if(v!==undefined) st[{w:'width',h:'height',l:'left',t:'top'}[k]]=v+'px'}
+    for(const k in m){ if(k.startsWith('--')){const v=g(k); st.setProperty(k,typeof v==='number'&&!['--k'].includes(k)?v+'px':v)} }
+    const bg=g('bg'); if(bg!==undefined) st.background=bg;
+  });
+  steps.forEach(f=>f(t));
+}
+
+/* ---------------- scene data ---------------- */
+const CAMX=REEL?-PAN:(AR?1100:-1100);                        // camera pan between devices
+const ITEMS=[
+ {img:'latte',price:110,en:['Latte','Fresh milk, double shot'],tr:['Latte','Taze süt, çift shot'],ar:['لاتيه','حليب طازج وإسبريسو مزدوج']},
+ {img:'baklava',price:140,en:['Pistachio baklava','Crisp layers, warm syrup'],tr:['Antep baklavası','Çıtır katlar, sıcak şerbet'],ar:['بقلاوة بالفستق','طبقات مقرمشة وشراب دافئ']},
+ {img:'cheesecake',price:120,en:['Strawberry cheesecake','Baked fresh'],tr:['Çilekli cheesecake','Taze fırından'],ar:['تشيز كيك الفراولة','مخبوز طازجًا']},
+ {img:'juice',price:70,en:['Orange juice','Freshly squeezed'],tr:['Portakal suyu','Taze sıkılmış'],ar:['عصير برتقال','معصور طازج']},
+ {img:'tart',price:130,en:['Chocolate tart','Dark chocolate, raspberry'],tr:['Çikolatalı tart','Bitter çikolata, ahududu'],ar:['تارت الشوكولاتة','شوكولاتة داكنة وتوت']},
+];
+const NAMES=AR?['بيت القهوة','حلويات الياسمين','ليمون']:TR?['Kahve Evi','Yasemin Pastanesi','Limon']:['The Coffee House','Bella Sweets','Lemon &amp; Co'];
+const MONO=AR?['ح','ل']:TR?['Y','L']:['B','L'];
+const LANGS={
+  en:{dir:'ltr',pill:'EN',shop:'The Coffee House',tabs:['Coffee','Sweets','Drinks']},
+  tr:{dir:'ltr',pill:'TR',shop:'The Coffee House',tabs:['Kahve','Tatlılar','İçecekler']},
+  ar:{dir:'rtl',pill:'AR',shop:'The Coffee House',tabs:['قهوة','حلويات','مشروبات']},
+};
+const MARK='<span class="mk"></span>';
+function buildContent(code){
+  const L=LANGS[code]; const rows=ITEMS.map((it,i)=>`
+    <div class="row" data-i="${i}"><div class="thumb"><img src="assets/${it.img}.jpg"></div>
+      <div class="info"><div class="n">${it[code][0]}</div><div class="d">${it[code][1]}</div><div class="pr">${it.price} ₺${code===M&&i===1?'<span class="hl"></span>':''}</div></div>
+      <div class="plus"><i>+</i><em>1</em></div></div>`).join('');
+  const nw=code===M?`<div class="row new" id="newrow"><div class="thumb"><img src="assets/croissant.jpg"></div>
+      <div class="info"><div class="n">${AR?'كرواسون بالزبدة':TR?'Tereyağlı kruvasan':'Butter croissant'}<span class="badge">${AR?'جديد':TR?'Yeni':'New'}</span></div><div class="d">${AR?'هشّ، يُخبز كل صباح':TR?'Gevrek, her sabah taze':'Flaky, baked every morning'}</div><div class="pr">65 ₺</div></div>
+      <div class="plus"><i>+</i></div></div>`:'';
+  return `<div class="content c-${code}${code===M?' c-main':''}" dir="${L.dir}">
+    <div class="hdr"><div class="lg">${MARK}<span class="mono">${MONO[0]}</span></div>
+      <div class="nm"><b>${(AR||TR)?NAMES[0]:L.shop}</b>${code===M?'<b>'+NAMES[1]+'</b><b>'+NAMES[2]+'</b>':''}</div>
+      <div class="lp">${L.pill}<svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 3.5l3 3 3-3"/></svg></div></div>
+    <div class="tabs">${L.tabs.map((x,i)=>`<span class="tab${i?'':' on'}">${x}</span>`).join('')}</div>
+    <div class="listwrap"><div class="list">${nw}${rows}</div></div></div>`;
+}
+document.getElementById('contents').innerHTML=['en','tr','ar'].map(buildContent).join('');
+
+/* caption blocks */
+function capHTML(c){
+  const lines=c.lines.map(l=>`<span class="line">${l.map(w=>{const o=typeof w==='string'?{w}:w;
+    return `<span class="w ${o.cls||''}"><span class="wi">${o.w}</span></span> `}).join('')}</span>`).join('');
+  return `<div class="capwrap"><div class="cap" id="${c.id}">${c.eyebrow?`<div class="eyebrow">${c.eyebrow}</div>`:''}<div class="h ${c.big?'big':''}">${lines}</div>${c.sub?`<div class="sub">${c.sub}</div>`:''}</div></div>`;
+}
+const CAPS_EN=[
+ {id:'c1',big:1,lines:[['Your','products'],['deserve','more','than'],['an',{w:'ordinary',cls:'strike'},'menu.']],t0:.5,t1:3.95},
+ {id:'c2',eyebrow:'Your digital menu',lines:[['Beautiful','from'],['the','first','tap.']],sub:'Product photos, prices and categories — all in one place.',t0:5.1,t1:7.75},
+ {id:'c3',eyebrow:'Three languages',lines:[[{w:'Arabic.',cls:'l1'}],[{w:'Türkçe.',cls:'l2'}],[{w:'English.',cls:'l3'}]],sub:'One menu that speaks to every customer.',t0:7.9,t1:10.35},
+ {id:'c4',eyebrow:'No app to download',lines:[['Browse.','Tap.'],['Add','to','cart.']],sub:'Customers order straight from your link, on their own phone.',t0:10.55,t1:16.5},
+ {id:'c5',eyebrow:'Orders',lines:[['Straight','to'],[{w:'WhatsApp.',cls:'it'}]],sub:'A clean, organized order, ready for your team to prepare.',t0:17.9,t1:21.7},
+ {id:'c6',eyebrow:'Your brand',lines:[['Your','logo.'],['Your',{w:'color.',cls:'it'}]],sub:'Make the menu feel like your shop, not ours.',t0:22.55,t1:25.9},
+ {id:'c7',eyebrow:'Always current',lines:[['Change','a','price.'],['Add','a','product.']],sub:'Update your menu whenever you need to.',t0:26.35,t1:29.8},
+ {id:'c8',eyebrow:'Share it anywhere',lines:[['A','link.'],['A','QR','code.']],sub:'Put it on your tables, your receipts, your Instagram.',t0:30.35,t1:33.6},
+];
+const CAPS_AR=[
+ {id:'c1',big:1,lines:[['منتجاتك','تستحق'],['أكثر','من','منيو',{w:'عادي.',cls:'strike'}]],t0:.5,t1:3.95},
+ {id:'c2',eyebrow:'منيوك الرقمي',lines:[['جميل','من'],['أول','لمسة.']],sub:'صور المنتجات والأسعار والأقسام — كلها في مكان واحد.',t0:5.1,t1:7.75},
+ {id:'c3',eyebrow:'ثلاث لغات',lines:[[{w:'العربية.',cls:'l1'}],[{w:'Türkçe.',cls:'l2'}],[{w:'English.',cls:'l3'}]],sub:'منيو واحد يخاطب كل زبون بلغته.',t0:7.9,t1:10.35},
+ {id:'c4',eyebrow:'بدون تحميل تطبيق',lines:[['تصفّح.','اضغط.'],['وأضف','للسلة.']],sub:'يطلب زبائنك مباشرة من رابطك، على جوالهم.',t0:10.55,t1:16.5},
+ {id:'c5',eyebrow:'الطلبات',lines:[['مباشرةً','إلى'],[{w:'واتساب.',cls:'it'}]],sub:'طلب مرتّب وواضح، جاهز لفريقك ليحضّره.',t0:17.9,t1:21.7},
+ {id:'c6',eyebrow:'هويتك',lines:[['شعارك.'],[{w:'لونك.',cls:'it'}]],sub:'اجعل المنيو يشبه محلّك، لا يشبهنا.',t0:22.55,t1:25.9},
+ {id:'c7',eyebrow:'محدَّث دائماً',lines:[['غيّر','سعراً.'],['أضف','منتجاً.']],sub:'حدّث منيو محلّك متى شئت.',t0:26.35,t1:29.8},
+ {id:'c8',eyebrow:'شاركه في كل مكان',lines:[['رابط.'],['أو',{w:'QR.',cls:'ltr'}]],sub:'ضعه على طاولاتك وفواتيرك وحسابك على إنستغرام.',t0:30.35,t1:33.6},
+];
+const noDot=t=>typeof t==='string'?t.replace(/[.·…]+$/,''):t;
+CAPS_AR.forEach(c=>{c.lines=c.lines.map(l=>l.map(w=>typeof w==='string'?noDot(w):{...w,w:noDot(w.w)}));c.sub=noDot(c.sub)});
+const CAPS=AR?CAPS_AR:CAPS_EN;
+const CTAH=AR?[['محلّك','يستحق'],['منيو',{w:'أفضل',cls:'it'}]]:['Your shop deserves',['a',{w:'better',cls:'it'},'menu.']];
+document.getElementById('caps').innerHTML=CAPS.map(capHTML).join('');
+document.getElementById('ch').innerHTML=
+ CTAH.map(l=>`<span class="line">${(typeof l==='string'?l.split(' '):l).map(w=>{const o=typeof w==='string'?{w}:w;return o.w.trim()===''?'':`<span class="w ${o.cls||''}"><span class="wi">${o.w}</span></span> `}).join('')}</span>`).join('');
+
+/* ---- geometry: landscape (optionally mirrored) or reel ---- */
+(function(){
+  const g=q=>document.querySelector(q);
+  if(REEL){
+    const w=document.createElement('div'); w.id='world'; w.className='abs'; w.style.cssText='left:0;top:0;width:1920px;height:1080px;transform-origin:0 0;transform:scale('+K+')';
+    g('#stage').insertBefore(w,g('#cam')); w.appendChild(g('#cam'));
+    g('#cam').style.transformOrigin=(L1+220)+'px '+(T1+450)+'px';
+    g('#phone1').style.left=L1+'px'; g('#phone1').style.top=T1+'px';
+    g('#phone2').style.left=(L1+PAN)+'px'; g('#phone2').style.top=T1+'px';
+    const sw=document.createElement('div'); sw.id='sharewrap'; sw.style.transform='scale(1.25)';
+    g('#stage').appendChild(sw); sw.appendChild(g('#qrcard')); sw.appendChild(g('#link'));
+    g('#qrcard').style.left=(432-210)+'px'; g('#qrcard').style.top='560px';
+    g('#link').style.left=(432-300)+'px'; g('#link').style.top='1110px';
+    const fl={f1:[30,200,420],f2:[250,160,290],f3:[670,160,290],f4:[850,200,420]};
+    for(const k in fl){const e=g('#'+k); e.style.left=fl[k][0]+'px'; e.style.width=fl[k][1]+'px'; e.style.height=fl[k][2]+'px'}
+  } else if(AR){
+    g('#cam').style.transformOrigin='740px 540px';
+    g('#phone1').style.left='520px'; g('#phone2').style.left='-580px';
+    g('#qrcard').style.left='530px'; g('#link').style.left='440px';
+  }
+})();
+/* ---- Arabic edition: translate static UI ---- */
+if(AR){
+  const $1=(q)=>document.querySelector(q), set=(q,t)=>{const e=$1(q); if(e) e.textContent=t};
+  ['#bar','#sheet','#bubble','.chdr','.notif','.composer','.field'].forEach(q=>$1(q).setAttribute('dir','rtl'));
+  set('#bar .t','عرض الطلب'); set('#sheet h4','طلبك');
+  const nn=[...document.querySelectorAll('#sheet .nn')]; nn[0].textContent='بقلاوة بالفستق ×1'; nn[1].textContent='لاتيه ×1';
+  set('#sheet .tot span:first-child','المجموع');
+  [...document.querySelectorAll('#sheet .seg span')].forEach((e,i)=>e.textContent=['في المحل','استلام','توصيل'][i]);
+  $1('#sheet .field').innerHTML='<b>رقم الطاولة</b> 4';
+  set('#sendA','أرسل الطلب عبر واتساب');
+  document.querySelectorAll('#logo span,.ctalogo span').forEach(e=>{e.textContent='سفرة';e.classList.remove('keep')}); set('#sendB','جارٍ التجهيز');
+  set('.chdr .tt b','طلب جديد'); set('.chdr .tt span','متصل الآن');
+  set('#bl0','في المحل — طاولة 4'); set('#bl1','طلب من المنيو');
+  $1('#bl2').innerHTML='<span>لاتيه ×1</span><span>110 ₺</span>'; $1('#bl3').innerHTML='<span>بقلاوة بالفستق ×1</span><span>140 ₺</span>';
+  $1('#bl4').innerHTML='<span>المجموع</span><span>250 ₺</span>';
+  set('.notif b','طلب جديد على واتساب'); set('.notif span','لاتيه ×1، بقلاوة بالفستق ×1'); set('.composer','رسالة');
+  set('.qrcard .cap2','امسح لفتح المنيو'); $1('.qrcard .shop').lastChild.nodeValue='منيوك';
+  set('#cs','ابدأ مجاناً لمدة شهرين'); set('#cn','بدون بطاقة بنكية     بدون خصم تلقائي');
+}
+if(TR){
+  const g=q=>document.querySelector(q), set=(q,t)=>{const e=g(q); if(e) e.textContent=t};
+  set('#bar .t','Siparişi gör'); set('#sheet h4','Siparişiniz');
+  const nn=[...document.querySelectorAll('#sheet .nn')]; nn[0].textContent='1× Antep baklavası'; nn[1].textContent='1× Latte';
+  set('#sheet .tot span:first-child','Toplam');
+  [...document.querySelectorAll('#sheet .seg span')].forEach((e,i)=>e.textContent=['Masada','Gel al','Teslimat'][i]);
+  g('#sheet .field').innerHTML='<b>Masa numarası</b> 4';
+  set('#sendA','Siparişi WhatsApp ile gönder'); set('#sendB','Hazırlanıyor');
+  set('.chdr .tt b','Yeni sipariş'); set('.chdr .tt span','çevrimiçi');
+  set('#bl0','Masada — Masa 4'); set('#bl1','Menüden sipariş');
+  g('#bl3').innerHTML='<span>1× Antep baklavası</span><span>140 ₺</span>'; g('#bl4').innerHTML='<span>Toplam</span><span>250 ₺</span>';
+  set('.notif b',"WhatsApp'ta yeni sipariş"); set('.notif span','1× Latte, 1× Antep baklavası'); set('.composer','Mesaj');
+}
+/* ---------------- choreography ---------------- */
+// backdrop drift (slow, constant, never competes)
+T('#b1',{x:[0,-140],y:[0,90]},0,DUR,'lin'); T('#b2',{x:[0,160],y:[0,-80]},0,DUR,'lin');
+
+// persistent mark
+T('#logo',{o:[0,1],y:[-12,0]},.15,.9,'expo'); T('#logo',{o:[1,0]},33.7,.5,'in');
+
+// captions (shared system: words rise out of a mask, exit lifts and fades)
+CAPS.forEach(c=>{
+  const q='#'+c.id;
+  T(q,{o:[0,1]},c.t0-.05,.01,'lin');
+  T(q+' .eyebrow',{o:[0,1],x:[-18,0]},c.t0,.8,'expo');
+  T(q+' .wi',{y:[118,0]},c.t0+.08,1.0,'expo',.085);
+  T(q+' .sub',{o:[0,1],y:[22,0]},c.t0+.55,.9,'expo');
+  T(q,{o:[1,0],y:[0,-26]},c.t1,.55,'in');
+  T(q,{o:0},c.t1+.55,.01,'lin');
+  // hidden before entry
+});
+// S1 strike-through: "ordinary" is crossed out — the whole point of the film
+T('.strike .wi',{'--k':[0,1]},2.55,.7,'inout');
+T('.strike .wi',{o:[1,.4]},2.7,.7,'inout');
+// S2b: highlight each language as the menu flips to it
+['l1','l2','l3'].forEach((cl,i)=>{
+  T('#c3 .'+cl+' .wi',{o:[.28,.28]},0,0); // base dim
+  const on=(AR?[9.85,7.95,8.95]:[7.95,8.95,9.85])[i];
+  T('#c3 .'+cl+' .wi',{o:[.28,1]},on,.6,'expo'); if(on<9.8) T('#c3 .'+cl+' .wi',{o:[1,.28]},on+1.0,.5,'inout');
+});
+
+// S1 hero arch
+T('#arch',{o:[0,1],y:[70,0]},.25,1.3,'expo');
+T('#archimg',{s:[1.22,1.05]},.25,3.85,'out'); T('#archimg',{s:[1.05,1]},4.1,1.1,'inout');
+if(REEL){const tx=K*(L1+(AR?274:38)), ty=K*(T1+218), sz=128*K; T('#arch',{l:[190,tx],t:[650,ty],w:[700,sz],h:[1000,sz],'--r':[350,64*K],'--rb':[40,20*K]},4.15,1.05,'inout');} else T('#arch',{l:[AR?230:1050,AR?794:998],t:[110,308],w:[640,128],h:[860,128],'--r':[320,64],'--rb':[36,20]},4.15,1.05,'inout');
+T('#arch',{o:[1,0]},5.2,.01,'lin');
+// hold arch static before morph
+// thumb of row 0 (EN) is the arch until swap
+T('.c-main .row[data-i="0"] .thumb',{o:[0,1]},5.2,.01,'lin');
+
+// S2 phone arrives
+T('#phone1',{o:[0,1],y:[90,0]},4.05,1.1,'expo');
+T('.c-main .hdr,.c-main .tabs',{o:[0,1],y:[18,0]},4.55,.9,'expo',.08);
+T('.c-main .row:not(.new):not([data-i="0"])',{o:[0,1],y:[34,0]},4.95,.95,'expo',.09);
+T('.c-main .row[data-i="0"] .info, .c-main .row[data-i="0"] .plus',{o:[0,1]},4.75,.9,'expo');
+T('.c-main .row[data-i="0"]',{o:[0,1]},4.5,.8,'expo');
+T(['tr','ar','en'].filter(c=>c!==M).map(c=>'.c-'+c).join(','),{o:[0,0]},0,0);
+T('#bar',{y:[120,120]},0,0);
+T('#dim',{o:[0,0]},0,0);
+T('#sheet',{y:[640,640]},0,0);
+// camera: slow controlled push on the device
+T('#cam',{s:[1,1.045]},5.2,5.2,'inout');
+
+// S2 scroll → show more photography
+const LISTS='.list';
+T(LISTS,{y:[0,-110]},6.0,1.5,'inout'); T(LISTS,{y:[-110,0]},9.45,1.0,'inout');
+// language flips (whole screen cross-fades; layout mirrors for Arabic)
+const sel=c=>c===M?'.c-main':'.c-'+c;
+function langSwap(a,b,t){T(sel(a),{o:[1,0],blur:[0,6]},t,.55,'inout'); T(sel(b),{o:[0,1],blur:[6,0]},t,.55,'inout');}
+const SEQ=AR?[M,'tr','en',M]:TR?[M,'ar','en',M]:[M,'ar','tr',M]; langSwap(SEQ[0],SEQ[1],7.95); langSwap(SEQ[1],SEQ[2],8.95); langSwap(SEQ[2],SEQ[3],9.85);
+
+// S3 — tap, add, cart, send
+function tap(x,y,t){
+  const el=document.createElement('div'); el.className='tap'; el.style.left=x+'px'; el.style.top=y+'px';
+  el.innerHTML='<div class="dot"></div><div class="ring"></div>'; document.getElementById('cam').appendChild(el);
+  const dot=el.querySelector('.dot'), ring=el.querySelector('.ring');
+  T(dot,{o:[0,1],s:[.6,1]},t,.14,'out'); T(dot,{s:[1,.82]},t+.14,.1,'out'); T(dot,{o:[1,0],s:[.82,1.05]},t+.28,.3,'out');
+  T(ring,{o:[0,.8],s:[.55,.9]},t+.1,.1,'lin'); T(ring,{o:[.8,0],s:[.9,2.0]},t+.2,.55,'out');
+}
+const SX=L1+(AR?61:374);                      // + button centre (stage px)
+const addBtn=(i,t)=>{
+  const b=`.c-main .row[data-i="${i}"] .plus`;
+  T(b+' i',{o:[1,0],s:[1,.4]},t,.16,'out'); T(b+' em',{o:[0,1],s:[.4,1]},t+.06,.4,'back');
+  T(b,{s:[1,1.18]},t,.12,'out'); T(b,{s:[1.18,1]},t+.12,.35,'back');
+};
+tap(SX,PY(528),10.85); addBtn(1,11.0);   // baklava
+tap(SX,PY(372),12.35); addBtn(0,12.5);   // latte
+T('#bar',{y:[120,0]},11.2,.85,'back'); T('#barn',{s:[1,1.25]},12.5,.15,'out'); T('#barn',{s:[1.25,1]},12.65,.35,'back');
+S(t=>{const two=t>=12.5; document.getElementById('barn').textContent=two?'2':'1'; document.getElementById('barp').textContent=two?'250 ₺':'140 ₺';});
+tap(CXB,PY(926),13.85);
+T('#bar',{s:[1,.95]},13.95,.12,'out'); T('#bar',{s:[.95,1]},14.07,.3,'back');
+T('#dim',{o:[0,1]},14.05,.7,'out'); T('#sheet',{y:[640,0]},14.05,.95,'expo');
+T('#sheet .ln2,#sheet .hr,#sheet .tot,#sheet .seg,#sheet .field',{o:[0,1],y:[18,0]},14.35,.7,'expo',.07);
+tap(CXB,PY(926),15.75);
+T('#send',{s:[1,.96]},15.85,.12,'out'); T('#send',{s:[.96,1]},15.97,.3,'back');
+T('#sendA',{o:[1,0]},16.05,.2,'out'); T('#sendB',{o:[0,1]},16.1,.25,'out');
+
+// S4 — camera glides to the receiving phone
+T('#cam',{x:[0,CAMX]},16.75,1.5,'inout');
+T('#cam',{s:[1.045,1]},16.75,1.5,'inout');
+T('#phone1',{o:[1,0]},16.95,.8,'in');
+T('#phone2',{o:[0,1]},16.9,.9,'out');
+// phone1 resets while off screen
+T('#bar',{y:[0,120]},18.2,.01,'lin'); T('#dim',{o:[1,0]},18.2,.01,'lin'); T('#sheet',{y:[0,640]},18.2,.01,'lin');
+T('#sendA',{o:[0,1]},18.2,.01,'lin'); T('#sendB',{o:[1,0]},18.2,.01,'lin');
+T('.c-main .row[data-i="0"] .plus i,.c-main .row[data-i="1"] .plus i',{o:[0,1],s:[.4,1]},18.2,.01,'lin');
+T('.c-main .row[data-i="0"] .plus em,.c-main .row[data-i="1"] .plus em',{o:[1,0]},18.2,.01,'lin');
+// notification then message
+T('#notif',{y:[-150,0],o:[0,1]},18.15,.7,'expo'); T('#notif',{y:[0,-150],o:[1,0]},20.1,.6,'in');
+T('#bubble',{o:[0,1],s:[.82,1],y:[26,0]},18.75,.7,'back');
+['#bl0','#bl1','#bl2','#bl3','#bl4','#bl5'].forEach((id,i)=>T(id,{o:[0,1],y:[10,0]},18.95+i*.16,.55,'expo'));
+T('#bl5 b',{o:[0,1]},20.2,.4,'out');
+// pan back
+T('#cam',{x:[CAMX,0]},21.85,1.5,'inout');
+T('#phone2',{o:[1,0]},22.0,.9,'in');
+T('#phone1',{o:[0,1]},22.3,.9,'out');
+
+// S5 — brand: colour + logo swap (three identities, one menu)
+const BR=['#55642f','#a9473a','#2f6b6a'];
+function brand(from,to,t){
+  T('#phone1',{'--brand':[BR[from],BR[to]]},t,.9,'inout');
+}
+brand(0,1,23.35); brand(1,2,24.75);
+T('.c-main .lg .mk',{o:[1,0]},23.35,.5,'inout'); T('.c-main .lg .mono',{o:[1,0]},24.75,.3,'in'); T('.c-main .lg .mono',{o:[0,1]},25.05,.4,'expo'); T('.c-main .lg .mono',{o:[0,1]},23.5,.6,'expo');
+S(t=>{ const m=document.querySelector('.c-main .lg .mono'); m.textContent=t>=25.05?MONO[1]:MONO[0]; });
+T('.c-main .nm b:nth-child(1)',{o:[1,0],y:[0,-14]},23.35,.45,'in'); T('.c-main .nm b:nth-child(2)',{o:[0,1],y:[14,0]},23.55,.7,'expo');
+T('.c-main .nm b:nth-child(2)',{o:[1,0],y:[0,-14]},24.75,.45,'in'); T('.c-main .nm b:nth-child(3)',{o:[0,1],y:[14,0]},24.95,.7,'expo');
+T('.c-main .nm b:nth-child(3)',{o:0},0,0);
+T('#cam',{s:[1,1.04]},22.9,3.0,'inout');
+
+// S6 — update: a price changes, a product arrives
+T('#newrow',{h:[0,148],'--mb':[0,8],o:[0,1]},26.9,1.0,'expo');
+S(t=>{const n=document.getElementById('newrow'); const p=clamp((t-26.9)/1.0); const e=EASE.expo(p); n.style.marginBottom=(8*e)+'px'; n.style.padding=(10*e)+'px';});
+T('.c-main .row[data-i="1"] .pr',{s:[1,1.0]},0,0);
+S(t=>{ const pr=document.querySelector('.c-main .row[data-i="1"] .pr'); pr.firstChild.nodeValue=t>=28.17?'150 ₺':'140 ₺'; });
+T('.c-main .row[data-i="1"] .pr',{y:[0,-9],o:[1,0]},27.95,.22,'in'); T('.c-main .row[data-i="1"] .pr',{y:[9,0],o:[0,1]},28.17,.5,'expo');
+T('.c-main .row[data-i="1"] .hl',{o:[0,1]},28.1,.2,'out'); T('.c-main .row[data-i="1"] .hl',{o:[1,0]},28.45,1.0,'inout');
+T('#cam',{s:[1.04,1.0]},29.0,1.2,'inout');
+
+// S7 — share: the phone gives way to a QR + link
+T('#phone1',{o:[1,0],blur:[0,8],s:[1,.96]},30.2,.8,'inout');
+T('#qrcard',{o:[0,1],y:[60,0],s:[.94,1]},30.7,1.1,'expo');
+T('#link',{o:[0,1],y:[34,0],s:[.96,1]},31.35,.95,'expo');
+T('#qrcard',{o:[1,0],y:[0,-20]},33.45,.5,'in'); T('#link',{o:[1,0],y:[0,-20]},33.45,.5,'in');
+
+// S8 — CTA
+T('#cta',{o:[0,1]},33.9,.01,'lin');
+T('#cl',{o:[0,1],y:[18,0]},34.2,.9,'expo');
+T('#ch .wi',{y:[130,0]},34.55,1.1,'expo',.1);
+T('#cs',{o:[0,1],y:[22,0]},35.75,.9,'expo');
+T('#cu',{o:[0,1],y:[26,0],s:[.96,1]},36.35,1.0,'expo');
+T('#cn',{o:[0,1]},37.0,.8,'expo');
+T('#f1',{y:[620,0]},34.4,1.5,'expo'); T('#f2',{y:[460,0]},34.6,1.5,'expo');
+T('#f3',{y:[460,0]},34.7,1.5,'expo'); T('#f4',{y:[620,0]},34.5,1.5,'expo');
+// slow settle drift so the final hold stays alive
+T('#f1',{y:[0,-14]},36,5,'out'); T('#f4',{y:[0,-14]},36,5,'out');
+T('#cu',{s:[1,1.02]},37.6,3.4,'inout');
+
+/* sound cue sheet (read by sfx.mjs so picture and sound share one clock) */
+window.CUES=[
+ {t:.35,k:'air',v:.5},
+ {t:4.15,k:'glide',v:.6},{t:5.15,k:'settle',v:.7},
+ {t:7.95,k:'lang',v:.7},{t:8.95,k:'lang',v:.7},{t:9.85,k:'lang',v:.7},
+ {t:10.85,k:'tap',v:.9},{t:11.1,k:'pop',v:.8},{t:11.45,k:'bar',v:.7},
+ {t:12.35,k:'tap',v:.9},{t:12.6,k:'pop',v:.9},
+ {t:13.85,k:'tap',v:.9},{t:14.1,k:'sheet',v:.8},
+ {t:15.75,k:'tap',v:1},{t:16.12,k:'confirm',v:.8},
+ {t:16.8,k:'pan',v:.8},
+ {t:18.15,k:'chime',v:.9},{t:18.8,k:'pop',v:.8},{t:20.25,k:'tick',v:.5},
+ {t:21.9,k:'pan',v:.7},
+ {t:23.35,k:'color',v:.8},{t:24.75,k:'color',v:.8},
+ {t:26.95,k:'pop',v:.7},{t:27.97,k:'tick',v:.8},
+ {t:30.7,k:'glide',v:.6},{t:31.5,k:'pop',v:.7},
+ {t:34.3,k:'glide',v:.6},{t:35.1,k:'resolve',v:.8},{t:36.4,k:'tick',v:.7}
+];
+
+/* ---------------- player ---------------- */
+function fit(){const s=Math.min(innerWidth/SW,innerHeight/SH); const st=document.getElementById('stage'); st.style.transform=`scale(${s})`; st.style.left=((innerWidth-SW*s)/2)+'px'; st.style.top=((innerHeight-SH*s)/2)+'px';}
+const TS=1.5;
+window.CUES.forEach(c=>c.t*=TS);
+window.seek=t=>{render(t/TS)}; window.DUR=DUR*TS; window.FPS=FPS;
+const q=new URLSearchParams(location.search);
+if(!q.has('raw')){fit();addEventListener('resize',fit)} else {document.getElementById('stage').style.transform='none'}
+const ready=Promise.all([document.fonts.ready,...[...document.images].map(i=>i.decode().catch(()=>{}))]).then(()=>{window.READY=true; render(+(q.get('t')||0)/TS);
+  if(q.has('play')){const t0=performance.now();(function loop(n){const t=(n-t0)/1000/TS;render(Math.min(t,DUR));if(t<DUR)requestAnimationFrame(loop)})(t0)}});
+</script>
+</body>
+</html>

@@ -319,9 +319,9 @@ Alpine.data('quickEdit', ({ items, urls, locales, messages }) => ({
         this.errors = [];
 
         const fields = [['price', this.form.price], ['compare_at_price', this.form.compare]];
-        for (const locale of this.locales) {
-            fields.push([`name[${locale}]`, this.form.names[locale]], [`description[${locale}]`, this.form.descriptions[locale]]);
-        }
+        // Only the main language is written; the server translates the rest.
+        const [main] = this.locales;
+        fields.push([`name[${main}]`, this.form.names[main]], [`description[${main}]`, this.form.descriptions[main]]);
         if (this.file) fields.push(['image', this.file]);
         if (this.removeImage) fields.push(['remove_image', '1']);
 

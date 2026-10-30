@@ -49,7 +49,7 @@
     <div class="splash" aria-hidden="true">
         <div class="flex flex-col items-center">
             <div class="splash-arch lx-niche grid h-44 w-32 place-items-center overflow-hidden ring-1 ring-ink/25">
-                <div class="splash-logo grid size-full place-items-center"><x-menu.monogram :shop="$shop" size="text-5xl" /></div>
+                <div class="splash-logo grid size-full place-items-center"><x-menu.monogram :shop="$shop" size="text-5xl" cover /></div>
             </div>
             <div class="mt-7 overflow-hidden px-6 pb-1">
                 <p class="splash-name text-center font-display text-3xl font-light">{{ $shop->name }}</p>
@@ -71,7 +71,7 @@
 
                 <div class="mt-8 flex flex-col items-center text-center">
                     <div class="hero-in lx-niche relative grid h-36 w-28 place-items-center overflow-hidden text-brand-ink ring-1 ring-brand/50" style="--i: 1">
-                        <x-menu.monogram :shop="$shop" size="text-5xl" />
+                        <x-menu.monogram :shop="$shop" size="text-5xl" cover />
                     </div>
 
                     <h1 class="lx-name hero-in mt-9" style="--i: 2">{{ $shop->name }}</h1>

@@ -49,7 +49,7 @@
         <div class="flex flex-col items-center">
             <div class="splash-arch arch grid h-48 w-36 place-items-center overflow-hidden bg-brand-fg/12 ring-1 ring-brand-fg/25">
                 <div class="splash-logo grid size-full place-items-center">
-                    <x-menu.monogram :shop="$shop" size="text-6xl" />
+                    <x-menu.monogram :shop="$shop" size="text-6xl" cover />
                 </div>
             </div>
             <div class="mt-7 overflow-hidden px-6 pb-1">
@@ -79,8 +79,8 @@
 
                 <div class="mt-6 flex flex-col items-center text-center">
                     <div class="hero-in arch relative grid h-44 w-34 place-items-center overflow-hidden bg-brand text-brand-fg shadow-[0_30px_60px_-30px_var(--brand)]" style="--i: 1">
-                        <div class="arch pointer-events-none absolute inset-2.5 border border-brand-fg/25" aria-hidden="true"></div>
-                        <x-menu.monogram :shop="$shop" size="text-6xl" />
+                        <div @class(["arch pointer-events-none absolute inset-2.5 border border-brand-fg/25", "hidden" => $shop->logo_path]) aria-hidden="true"></div>
+                        <x-menu.monogram :shop="$shop" size="text-6xl" cover />
                     </div>
 
                     <h1 class="hero-in mt-7 font-display text-4xl leading-tight font-semibold text-balance sm:text-5xl" style="--i: 2">{{ $shop->name }}</h1>

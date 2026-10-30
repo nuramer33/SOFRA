@@ -142,7 +142,7 @@ return [
     'forms' => [
         'content_language' => 'İçerik dili',
         'required' => 'Zorunlu',
-        'fallback_note' => 'Diğer diller isteğe bağlı; boş bırakılırsa metin :language olarak görünür.',
+        'auto_translate_note' => 'Bir kez ana dilinizde yazın; diğer dillere otomatik çevrilir.',
         'has_errors' => 'Bu dilde bir hata var',
     ],
 

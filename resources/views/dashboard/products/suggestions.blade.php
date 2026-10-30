@@ -85,7 +85,7 @@
                         </div>
                     </label>
 
-                    @foreach ($locales as $locale)
+                    @foreach ([$shop->default_locale] as $locale)
                         <div class="space-y-4">
                             <label class="block space-y-1.5">
                                 <span class="flex items-center gap-2 text-sm font-medium text-ink-soft">
@@ -110,7 +110,7 @@
                         </div>
                     @endforeach
                     @if (count($locales) > 1)
-                        <p class="text-xs text-ink-mute">{{ __('app.forms.fallback_note', ['language' => \App\Support\Locales::name($shop->default_locale)]) }}</p>
+                        <p class="text-xs text-ink-mute">{{ __('app.forms.auto_translate_note') }}</p>
                     @endif
 
                     {{-- Optional discount --}}

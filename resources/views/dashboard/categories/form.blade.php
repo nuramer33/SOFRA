@@ -15,12 +15,12 @@
         @if ($editing) @method('PUT') @endif
 
         <section class="card space-y-6 p-5 sm:p-7">
-            <x-translatable-field name="name" :label="__('app.fields.name')" :locales="$locales"
+            <x-translatable-field name="name" :label="__('app.fields.name')" :locales="[$shop->default_locale]"
                                   :values="$category->getTranslations('name')" :required="$shop->default_locale"
                                   maxlength="60" :placeholder="__('app.categories.name_placeholder')" />
 
             @if (count($locales) > 1)
-                <p class="text-xs text-ink-mute">{{ __('app.forms.fallback_note', ['language' => \App\Support\Locales::name($shop->default_locale)]) }}</p>
+                <p class="text-xs text-ink-mute">{{ __('app.forms.auto_translate_note') }}</p>
             @endif
 
             <div class="border-t border-line pt-5">

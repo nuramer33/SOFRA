@@ -22,7 +22,13 @@ class ShopSettingsRequest extends FormRequest
 
     protected function prepareForValidation(): void
     {
+        // The form shows only the current main language. If the owner changes
+        // the main language in the same save, reuse the name they typed.
+        $names = array_filter((array) $this->input('name'), fn ($name) => is_string($name) && trim($name) !== '');
+        $default = (string) $this->input('default_locale');
+
         $this->merge([
+            'name' => $names + ($names !== [] && $default !== '' ? [$default => reset($names)] : []),
             'slug' => mb_strtolower(trim((string) $this->input('slug'))),
             'brand_color' => mb_strtolower(trim((string) $this->input('brand_color'))),
             'whatsapp_number' => Numbers::phone($this->input('whatsapp_number')),

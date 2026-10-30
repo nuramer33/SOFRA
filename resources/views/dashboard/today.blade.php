@@ -185,19 +185,8 @@
                     </div>
 
                     {{-- Names and descriptions, one language at a time --}}
-                    @if (count($locales) > 1)
-                        <div class="inline-flex rounded-full bg-sand p-1 ring-1 ring-line" role="tablist">
-                            @foreach ($locales as $locale)
-                                <button type="button" role="tab" @click="lang = @js($locale)" :aria-selected="lang === @js($locale)" lang="{{ $locale }}"
-                                        class="min-h-10 rounded-full px-3.5 text-sm font-medium transition-colors"
-                                        :class="lang === @js($locale) ? 'bg-ink text-paper shadow-sm' : 'text-ink-soft hover:text-ink'">
-                                    {{ \App\Support\Locales::name($locale) }}
-                                </button>
-                            @endforeach
-                        </div>
-                    @endif
-                    @foreach ($locales as $locale)
-                        <div x-show="lang === @js($locale)" @if (! $loop->first) x-cloak @endif class="space-y-4">
+                    @foreach ([$shop->default_locale] as $locale)
+                        <div class="space-y-4">
                             <label class="block space-y-1.5">
                                 <span class="text-sm font-medium text-ink-soft">{{ __('app.fields.name') }}
                                     @if ($locale === $shop->default_locale)<span class="text-[11px] font-normal text-clay">{{ __('app.forms.required') }}</span>@endif
@@ -211,7 +200,7 @@
                         </div>
                     @endforeach
                     @if (count($locales) > 1)
-                        <p class="text-xs text-ink-mute">{{ __('app.forms.fallback_note', ['language' => \App\Support\Locales::name($shop->default_locale)]) }}</p>
+                        <p class="text-xs text-ink-mute">{{ __('app.forms.auto_translate_note') }}</p>
                     @endif
 
                     {{-- Prices --}}

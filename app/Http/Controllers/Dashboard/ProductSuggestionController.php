@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Dashboard\ProductSuggestionsRequest;
 use App\Models\Product;
 use App\Models\ProductSuggestion;
+use App\Support\AutoTranslator;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
@@ -26,11 +27,11 @@ class ProductSuggestionController extends Controller
         ]);
     }
 
-    public function update(ProductSuggestionsRequest $request, Product $product): RedirectResponse
+    public function update(ProductSuggestionsRequest $request, Product $product, AutoTranslator $translator): RedirectResponse
     {
         $locales = $request->shop()->contentLocales();
 
-        DB::transaction(function () use ($request, $product, $locales) {
+        DB::transaction(function () use ($request, $product, $locales, $translator) {
             $product->suggestions()->delete();
 
             foreach ($request->validated('suggestions', []) as $position => $row) {
@@ -44,7 +45,7 @@ class ProductSuggestionController extends Controller
                 ]);
 
                 foreach (['title', 'description'] as $field) {
-                    $suggestion->setTranslations($field, $this->translations((array) ($row[$field] ?? []), $locales));
+                    $suggestion->setTranslations($field, $translator->fill($this->translations((array) ($row[$field] ?? []), $locales), $locales));
                 }
 
                 $suggestion->save();

@@ -18,6 +18,9 @@ return [
         'en' => ['name' => 'English', 'dir' => 'ltr'],
     ],
 
+    // Owners write a text once; the other languages are translated for them.
+    'auto_translate' => env('SOFRA_AUTO_TRANSLATE', true),
+
     // Public menus live at the root: sofra.app/{slug}. These words can never
     // be a shop slug because they are (or will be) our own routes.
     'reserved_slugs' => [

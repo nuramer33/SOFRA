@@ -48,9 +48,9 @@
         <div x-show="tab === 'store'" data-tab="store" role="tabpanel" class="space-y-4 lg:space-y-6">
         {{-- Identity ------------------------------------------------------- --}}
         <x-settings-section :title="__('app.settings.section_identity')" :text="__('app.settings.section_identity_text')" :i="1">
-            <x-translatable-field name="name" :label="__('app.fields.shop_name')" :locales="$locales"
+            <x-translatable-field name="name" :label="__('app.fields.shop_name')" :locales="[$shop->default_locale]"
                                   :values="$shop->getTranslations('name')" :required="$shop->default_locale" maxlength="80" />
-            <x-translatable-field name="tagline" :label="__('app.fields.tagline')" :locales="$locales"
+            <x-translatable-field name="tagline" :label="__('app.fields.tagline')" :locales="[$shop->default_locale]"
                                   :values="$shop->getTranslations('tagline')" maxlength="120"
                                   :placeholder="__('app.settings.tagline_placeholder')" />
 
@@ -110,10 +110,10 @@
 
         {{-- Location & contact ---------------------------------------------- --}}
         <x-settings-section :title="__('shopinfo.settings.section_contact')" :text="__('shopinfo.settings.section_contact_text')" :i="2">
-            <x-translatable-field name="address" :label="__('shopinfo.settings.address')" :locales="$locales"
+            <x-translatable-field name="address" :label="__('shopinfo.settings.address')" :locales="[$shop->default_locale]"
                                   :values="$shop->getTranslations('address')" maxlength="200"
                                   :placeholder="__('shopinfo.settings.address_placeholder')" />
-            <x-translatable-field name="hours" :label="__('shopinfo.settings.hours')" :locales="$locales"
+            <x-translatable-field name="hours" :label="__('shopinfo.settings.hours')" :locales="[$shop->default_locale]"
                                   :values="$shop->getTranslations('hours')" maxlength="150"
                                   :placeholder="__('shopinfo.settings.hours_placeholder')" />
 

@@ -27,16 +27,16 @@
                     <h2 class="{{ $sectionTitle }} !mb-0">{{ __('app.products.section_details') }}</h2>
                 </div>
 
-                <x-translatable-field name="name" :label="__('app.fields.name')" :locales="$locales"
+                <x-translatable-field name="name" :label="__('app.fields.name')" :locales="[$shop->default_locale]"
                                       :values="$product->getTranslations('name')" :required="$shop->default_locale"
                                       maxlength="80" :placeholder="__('app.products.name_placeholder')" />
 
-                <x-translatable-field name="description" :label="__('app.fields.description')" :locales="$locales"
+                <x-translatable-field name="description" :label="__('app.fields.description')" :locales="[$shop->default_locale]"
                                       :values="$product->getTranslations('description')" multiline
                                       maxlength="400" :placeholder="__('app.products.description_placeholder')" />
 
                 @if (count($locales) > 1)
-                    <p class="text-xs text-ink-mute">{{ __('app.forms.fallback_note', ['language' => \App\Support\Locales::name($shop->default_locale)]) }}</p>
+                    <p class="text-xs text-ink-mute">{{ __('app.forms.auto_translate_note') }}</p>
                 @endif
 
                 <x-field name="category_id" :label="__('app.fields.category')">
